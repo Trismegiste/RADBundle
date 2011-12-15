@@ -1,0 +1,111 @@
+<?php
+/**
+ * Unit testing for {{ fqcnEntity }}
+ * Scaffolded by TrismegisteRADBundle 
+ * 
+ * @author trismegiste@voila.fr
+ */
+require_once __DIR__.'/../../../../../app/AppKernel.php';
+
+use {{ fqcnEntity }};
+
+class {{ test_class }} extends \PHPUnit_Framework_TestCase
+{
+
+    protected $object = null;
+
+    protected function setUp()
+    {
+        $kernel = new AppKernel('test', true);
+        $kernel->boot();
+        $this->validator = $kernel->getContainer()->get('validator');
+            
+        $this->object = new {{ entity }}();
+    }
+
+    public function getStringValues()
+    {
+        return array( array('spock', 'tuvok') );
+    }
+
+    public function getIntegerValues()
+    {
+        return array( array(rand(1000, 9999), 42) );
+    }
+
+    public function getDatetimeValues() {
+        $ajd = new \DateTime();
+        $demain = clone $ajd;
+        $demain->modify('+1 day');
+        return array(array($ajd, $demain));
+    }
+
+    {% for field in fields %}
+    /**
+     * Testing for {{ field.property }}
+     *
+     * @dataProvider get{{ field.type }}Values
+     * @covers {{ entity }}::get{{ field.accessor }}
+     * @covers {{ entity }}::set{{ field.accessor }}
+     */
+    public function test{{ field.accessor }}($setting, $notSetted)
+    {
+        $this->object->set{{ field.accessor }}($setting);
+        $this->assertEquals($this->object->get{{ field.accessor }}(), $setting);
+        $this->assertNotEquals($this->object->get{{ field.accessor }}(), $notSetted);
+    }
+
+    {% endfor %}
+
+    /**
+     * Test for assertions against a newly created {{ entity }}
+     */
+    public function testValidatorNudeObject()
+    {
+        $obj = new {{ entity }}();
+        $error = $this->validator->validate($obj);
+        $this->assertEquals(count($error), {{ nudeValidation|length }}, "List of violations differs");
+
+        $expected = array();
+        {% for search in nudeValidation %}
+        $expected[] = array( 'property' => '{{ search.property }}', 'message' => "{{ search.message }}");
+        {% endfor %}
+
+        // check assertions
+        foreach($expected as $search) {
+            $found = false;
+            foreach($error as $violation) {
+                if ( ($violation->getMessageTemplate() == $search['message'])
+                && ($violation->getPropertyPath() == $search['property']) ) {
+                    $found = true;
+                    break;
+                }
+            }
+            $this->assertTrue($found, "Assert '{$search['message']}' not found on {{ entity }}::{$search['property']}");
+        }
+
+    }
+
+
+    /**
+     * Test for assertions against a correctly initialized {{ entity }}
+     */
+    public function testValidatedObject()
+    {
+        $obj = new {{ entity }}();
+        // setting good values
+        $this->initializeValid($obj);
+
+        $error = $this->validator->validate($obj);
+        $this->assertEquals(0, count($error), "{{ entity }} is difficulter to validate");
+    }
+
+    protected function initializeValid({{ entity }} $obj)
+    {
+        {% for search in nudeValidation %}
+        //  {{ search.message }} : 
+        $obj->set{{ search.accessor }}();   
+        {% endfor %}    
+    }
+     
+}
