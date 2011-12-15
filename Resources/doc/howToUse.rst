@@ -8,6 +8,7 @@ Create your new entity like any other entity
 2 - Scaffold Unit Test Class
 ---------------------------
 For ORM/Entity : app/console test:generate:entity ChoralTestBundle:Verify
+
 For MongoDB/Document : app/console test:generate:document ChoralTestBundle:Verify
 
 3 - Customize object initialization and validation
