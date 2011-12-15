@@ -26,8 +26,9 @@ Your are in a hurry and you need to refactor one or many bundles. Then, you disc
 How
 ---
 Then, you have 2 choices :
-* refactoring without unit testing. This is like playing russian roulette with a semi-automatic pistol
-* use this bundle to rapidily generate some unit testing. Now you have only 2 or 3 bullets in your six shooter.
+
+- refactoring without unit testing. This is like playing russian roulette with a semi-automatic pistol
+- use this bundle to rapidily generate some unit testing. Now you have only 2 or 3 bullets in your six shooter.
 
 How much
 --------
