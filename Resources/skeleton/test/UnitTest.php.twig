@@ -33,11 +33,36 @@ class {{ test_class }} extends \PHPUnit_Framework_TestCase
         return array( array(rand(1000, 9999), 42) );
     }
 
+    public function getSmallintValues()
+    {
+        return $this->getIntegerValues();
+    }
+    
+    public function getFloatValues()
+    {
+        return array( array(0.1  * rand(1000, 9999), 4.2) );
+    }
+
+    public function getDecimalValues()
+    {
+        return $this->getFloatValues();
+    }
+    
     public function getDatetimeValues() {
         $ajd = new \DateTime();
         $demain = clone $ajd;
         $demain->modify('+1 day');
         return array(array($ajd, $demain));
+    }
+
+    public function getDateValues()
+    {
+        return array( array('1973-05-05', '1995-04-01'));
+    }
+
+    public function getTimeValues()
+    {
+        return array( array('20:21:22', '12:34:56'));
     }
 
     {% for field in fields %}

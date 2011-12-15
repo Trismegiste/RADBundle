@@ -19,7 +19,7 @@ class DoctrineTestGenerator extends SensioGenerator {
     private $skeletonDir;
     private $className;
     private $classPath;
-    protected $testedType = array('integer', 'string', 'datetime');
+    protected $testedType = array('integer', 'string', 'datetime', 'float', 'decimal', 'smallint', 'date', 'time');
     protected $validator = null;
 
     public function __construct(Filesystem $filesystem, $skeletonDir, Validator $validator) {
