@@ -2,62 +2,68 @@
 
 namespace Trismegiste\RADBundle\Command;
 
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Bundle\DoctrineBundle\Mapping\MetadataFactory;
-use Trismegiste\RADBundle\Generator\DoctrineTestGenerator;
-use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineCommand;
-use Sensio\Bundle\GeneratorBundle\Command\Validators;
+use Symfony\Component\Routing\Matcher\Dumper\ApacheMatcherDumper;
 
 /**
- * Generates a routing testing class
+ * Generates a unit testing class for a given routes
  *
  * @author trismegiste@voila.fr
  */
-class GenerateRoutingTestCommand extends ContainerAwareCommand
-{
+class GenerateRoutingTestCommand extends ContainerAwareCommand {
+
     /**
      * @see Command
      */
-    protected function configure()
-    {
-        $this         
-            ->setDescription('Generates a functional testing class based on routing')
-            ->setHelp(<<<EOT
-The <info>test:generate:routing</info> command generates a functional testing class based on routing.
+    protected function configure() {
+        $this
+                ->setDefinition(array(
+                    new InputArgument('filter', InputArgument::OPTIONAL, 'Filter for the routing', '.*'),
+                ))
+                ->setDescription('Generates a functional test class based on a collection of route filtered')
+                ->setHelp(<<<EOT
+The <info>test:generate:routing</info> command generates a functional test class based on a collection of route filtered.
 
-<info>php app/console test:generate:routing <filter></info>
+<info>php app/console test:generate:routing [regexp]</info>
 EOT
-            )
-            ->setName('test:generate:routing')
+                )
+                ->setName('test:generate:routing')
         ;
     }
- /**
-         // Create a new client to browse the application
-         $client = static::createClient();
 
-         // Create a new entry in the database
-         echo "List products\n";
-         $crawler = $client->request('GET', $this->getUrlStart());
-         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-
-         echo "Choose to create a $entityKey\n";
-         $client->submit($crawler->selectButton('Create')->form(array('key_type' => $entityKey)));
-         */
-    
     /**
      * @see Command
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {             
-        /** @var Symfony\Component\Routing\RouteCollection $listRoute */
-        $listRoute = $this->getContainer()->get('router')->getRouteCollection()->all();
-        foreach($listRoute as $clef => $route)
-            $output->writeln($clef . ' ' . $route->getPattern());        
-       
+    protected function execute(InputInterface $input, OutputInterface $output) {
+        $filter = $input->getArgument('filter');
+        $router = $this->getContainer()->get('router');
+
+        $routes = array();
+        foreach ($router->getRouteCollection()->all() as $name => $route) {
+            if (preg_match("#$filter#", $name)) {
+                $testRoute = $route->compile();
+                $url = $testRoute->getPattern();
+                $url = preg_replace('#(\{([aA-zZ]+)\})#', '\$$2' , $url);
+                $requirements = $route->getRequirements();
+                if (!isset($requirements['_method'])) 
+                    $method = array('get');
+                else
+                    $method = (is_array($method)) ? $method : array($method);
+                
+                $routes[$name] = array(
+                    'url' => $url,
+                    'var' => $testRoute->getVariables(),
+                    'method' => $method
+                );
+            }
+        }
+
+        var_dump($routes);
     }
+
 }
