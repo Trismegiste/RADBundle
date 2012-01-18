@@ -3,23 +3,27 @@
  * Unit testing for {{ fqcnEntity }}
  * Scaffolded by TrismegisteRADBundle 
  * 
- * @author trismegiste@voila.fr
  */
-require_once __DIR__.'/../../../../../app/AppKernel.php';
-
+ 
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use {{ fqcnEntity }};
 
-class {{ test_class }} extends \PHPUnit_Framework_TestCase
+class {{ test_class }} extends WebTestCase
 {
 
     protected $object = null;
+    protected static $validator = null;
 
+    public static function setUpBeforeClass()
+    {
+        self::$kernel = parent::createKernel();
+        self::$kernel->boot();
+
+        self::$validator = self::$kernel->getContainer()->get('validator');
+    }
+    
     protected function setUp()
     {
-        $kernel = new AppKernel('test', true);
-        $kernel->boot();
-        $this->validator = $kernel->getContainer()->get('validator');
-            
         $this->object = new {{ entity }}();
     }
 
@@ -88,7 +92,7 @@ class {{ test_class }} extends \PHPUnit_Framework_TestCase
     public function testValidatorNudeObject()
     {
         $obj = new {{ entity }}();
-        $error = $this->validator->validate($obj);
+        $error = self::$validator->validate($obj);
         $this->assertEquals(count($error), {{ nudeValidation|length }}, "List of violations differs");
 
         $expected = array();
@@ -121,7 +125,7 @@ class {{ test_class }} extends \PHPUnit_Framework_TestCase
         // setting good values
         $this->initializeValid($obj);
 
-        $error = $this->validator->validate($obj);
+        $error = self::$validator->validate($obj);
         $this->assertEquals(0, count($error), "{{ entity }} is difficulter to validate");
     }
 
