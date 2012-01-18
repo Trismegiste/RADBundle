@@ -19,7 +19,7 @@ class DoctrineTestGenerator extends SensioGenerator {
     private $skeletonDir;
     private $className;
     private $classPath;
-    protected $testedType = array('integer', 'string', 'datetime', 'float', 'decimal', 'smallint', 'date', 'time');
+    protected $testedType = array('integer', 'string', 'datetime', 'float', 'decimal', 'smallint', 'date', 'time', 'text', 'boolean');
     protected $validator = null;
 
     public function __construct(Filesystem $filesystem, $skeletonDir, Validator $validator) {
@@ -47,9 +47,9 @@ class DoctrineTestGenerator extends SensioGenerator {
         $parts = explode('\\', $entity);
         $entityClass = array_pop($parts);
 
-        $this->className = $entityClass . 'UnitTest';
+        $this->className = $entityClass . 'Test';
         $dirPath = $bundle->getPath() . '/Tests/Model';
-        $this->classPath = $dirPath . '/' . str_replace('\\', '/', $entity) . 'UnitTest.php';
+        $this->classPath = $dirPath . '/' . str_replace('\\', '/', $entity) . 'Test.php';
 
         if (file_exists($this->classPath)) {
             throw new \RuntimeException(sprintf('Unable to generate the %s test class as it already exists under the %s file', $this->className, $this->classPath));

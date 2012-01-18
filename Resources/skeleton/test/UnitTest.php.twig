@@ -27,10 +27,20 @@ class {{ test_class }} extends WebTestCase
         $this->object = new {{ entity }}();
     }
 
+    public function getBooleanValues()
+    {
+        return array( array(true, false) );
+    }
+
     public function getStringValues()
     {
         return array( array('spock', 'tuvok') );
     }
+    
+    public function getTextValues()
+    {
+        return array( array('brown fox', 'lazy dog') );
+    }    
 
     public function getIntegerValues()
     {
