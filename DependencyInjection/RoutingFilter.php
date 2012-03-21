@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Route;
 
 /**
  * Description of RoutingFilter
+ * This is a mother class for many ways of reading/filtering/extracting routes
+ * See subclasses
  *
  * @author flo
  */
