@@ -21,6 +21,11 @@ abstract class RoutingFilter {
         $this->router = $router;
     }
 
+    /**
+    * This is the method to implement : 
+    * Return true xor false if the $route named $name matches the string $filter
+    * You can filter the way you want with this 3 params, even return a random !
+    */
     abstract protected function isMatching($name, Route $route, $filter);
 
     public function getExtract($filter) {
