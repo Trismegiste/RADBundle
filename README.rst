@@ -1,5 +1,5 @@
-Work *intensively* in creation : do not use at this time !
-===========================================================
+TrismegisteRADBundle
+=====================
 
 What
 ----
