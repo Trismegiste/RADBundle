@@ -5,7 +5,9 @@ namespace Trismegiste\RADBundle\DependencyInjection;
 use Symfony\Component\Routing\Route;
 
 /**
- * Description of RoutingFilter
+ * Concret class for the Template Method design pattern
+ *
+ * Algorithm : Filtering based on one Controller
  *
  * @author flo
  */
