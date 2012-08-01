@@ -3,7 +3,7 @@
 namespace Trismegiste\RADBundle\Generator;
 
 use Sensio\Bundle\GeneratorBundle\Generator\Generator as SensioGenerator;
-use Symfony\Component\HttpKernel\Util\Filesystem;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Util\Inflector;
