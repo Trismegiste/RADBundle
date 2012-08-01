@@ -38,6 +38,6 @@ Specify the shortname of the controller ::
 
 2 - Generating Test for a filtered collection of routes
 ------------------------------------------------------------
-Specify the prefix of the routes' names ::
+Specify the prefix of the routes' names and a destination bundle for the test class ::
 
   app/console test:generate:routing --bundle AcmeDemoBundle _demo
