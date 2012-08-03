@@ -1,5 +1,5 @@
 {
-    "name": "TrismegisteRADBundle",
+    "name": "Trismegiste/RADBundle",
     "description": "Scaffolding for phpunit in symfony2",
     "type": "symfony-bundle",
     "keywords": ["phpunit", "scaffolding", "symfony"],
