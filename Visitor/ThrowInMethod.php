@@ -4,16 +4,16 @@
  * flyingmecha
  */
 
-namespace Trismegiste\RADBundle\DependencyInjection;
+namespace Trismegiste\RADBundle\Visitor;
 
 /**
  * MethodVisitor is a
  */
-class MethodReturnVisitor extends \PHPParser_NodeVisitorAbstract
+class ThrowInMethod extends \PHPParser_NodeVisitorAbstract
 {
 
     protected $currentMethod;
-    public $returnStmt = array();
+    public $filtered = array();
 
     public function enterNode(\PHPParser_Node $node)
     {
@@ -23,11 +23,11 @@ class MethodReturnVisitor extends \PHPParser_NodeVisitorAbstract
                 $this->currentMethod = $node->name;
                 break;
 
-            case 'Stmt_Return':
+            case 'Stmt_Throw':
                 if (!isset($this->currentMethod)) {
                     throw new \RuntimeException('No current method (odd)');
                 }
-                $this->returnStmt[$this->currentMethod][] = $node;
+                $this->filtered[$this->currentMethod][] = $node;
                 break;
         }
     }
@@ -42,7 +42,7 @@ class MethodReturnVisitor extends \PHPParser_NodeVisitorAbstract
     public function afterTraverse(array $nodes)
     {
         $prettyPrinter = new \PHPParser_PrettyPrinter_Zend();
-        foreach ($this->returnStmt as $methodName => $retour) {
+        foreach ($this->filtered as $methodName => $retour) {
             echo $methodName . PHP_EOL;
             foreach ($retour as $stmt) {
                 echo '  ' . $prettyPrinter->prettyPrint(array($stmt)) . PHP_EOL;

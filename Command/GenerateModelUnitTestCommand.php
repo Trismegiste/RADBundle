@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Command\Command;
-use Trismegiste\RADBundle\DependencyInjection\MethodVisitor;
+use Trismegiste\RADBundle\Visitor;
 
 /**
  * GenerateModelUnitTest is a ...
@@ -55,16 +55,16 @@ EOT
         $code = file_get_contents($fchPath);
 
         $parser = new \PHPParser_Parser(new \PHPParser_Lexer);
-        //$serializer = new \PHPParser_Serializer_XML();
 
         try {
             $stmts = $parser->parse($code);
             $traverser = new \PHPParser_NodeTraverser();
-            $traverser->addVisitor(new \Trismegiste\RADBundle\DependencyInjection\MethodVisitor());
-            $traverser->addVisitor(new \Trismegiste\RADBundle\DependencyInjection\MethodReturnVisitor());
+            $traverser->addVisitor(new Visitor\SetterGetter());
+            $traverser->addVisitor(new Visitor\ReturnInMethod());
+            $traverser->addVisitor(new Visitor\ThisInMethod());
+            $traverser->addVisitor(new Visitor\ThrowInMethod());
             // traverse
             $traverser->traverse($stmts);
-            //echo $serializer->serialize($stmts);
         } catch (\PHPParser_Error $e) {
             echo 'Parse Error: ', $e->getMessage();
         }

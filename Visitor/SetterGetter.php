@@ -4,12 +4,12 @@
  * flyingmecha
  */
 
-namespace Trismegiste\RADBundle\DependencyInjection;
+namespace Trismegiste\RADBundle\Visitor;
 
 /**
  * MethodVisitor is a
  */
-class MethodVisitor extends \PHPParser_NodeVisitorAbstract
+class SetterGetter extends \PHPParser_NodeVisitorAbstract
 {
 
     public $method = array();
