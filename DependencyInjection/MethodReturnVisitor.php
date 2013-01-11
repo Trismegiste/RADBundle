@@ -12,7 +12,6 @@ namespace Trismegiste\RADBundle\DependencyInjection;
 class MethodReturnVisitor extends \PHPParser_NodeVisitorAbstract
 {
 
-    public $method = array();
     protected $currentMethod;
     public $returnStmt = array();
 
@@ -21,11 +20,7 @@ class MethodReturnVisitor extends \PHPParser_NodeVisitorAbstract
         switch ($node->getType()) {
 
             case 'Stmt_ClassMethod' :
-                $this->currentMethod = $methodName = $node->name;
-                // store getter and setter
-                if (preg_match('#[s|g]et[A-Z][_0-9A-Za-z]#', $methodName)) {
-                    $this->method[] = $methodName;
-                }
+                $this->currentMethod = $node->name;
                 break;
 
             case 'Stmt_Return':
@@ -46,17 +41,6 @@ class MethodReturnVisitor extends \PHPParser_NodeVisitorAbstract
 
     public function afterTraverse(array $nodes)
     {
-        $property = array();
-        foreach ($this->method as $mutator) {
-            if ($mutator[0] == 's') {
-                foreach ($this->method as $accessor) {
-                    if ($accessor == substr_replace($mutator, 'g', 0, 1)) {
-                        $property[] = lcfirst(substr($mutator, 3));
-                    }
-                }
-            }
-        }
-
         $prettyPrinter = new \PHPParser_PrettyPrinter_Zend();
         foreach ($this->returnStmt as $methodName => $retour) {
             echo $methodName . PHP_EOL;
@@ -64,8 +48,6 @@ class MethodReturnVisitor extends \PHPParser_NodeVisitorAbstract
                 echo '  ' . $prettyPrinter->prettyPrint(array($stmt)) . PHP_EOL;
             }
         }
-
-        print_r($property);
     }
 
 }

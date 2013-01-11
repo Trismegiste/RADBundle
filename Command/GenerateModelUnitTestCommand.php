@@ -60,6 +60,7 @@ EOT
         try {
             $stmts = $parser->parse($code);
             $traverser = new \PHPParser_NodeTraverser();
+            $traverser->addVisitor(new \Trismegiste\RADBundle\DependencyInjection\MethodVisitor());
             $traverser->addVisitor(new \Trismegiste\RADBundle\DependencyInjection\MethodReturnVisitor());
             // traverse
             $traverser->traverse($stmts);
