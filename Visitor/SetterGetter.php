@@ -1,18 +1,20 @@
 <?php
 
 /*
- * flyingmecha
+ * radbundle
  */
 
 namespace Trismegiste\RADBundle\Visitor;
 
+use Trismegiste\RADBundle\Generator\ClassMethodInfo;
+
 /**
- * MethodVisitor is a
+ * SetterGetter do a match between getter and setter
  */
-class SetterGetter extends \PHPParser_NodeVisitorAbstract
+class SetterGetter extends CollectorVisitor
 {
 
-    public $method = array();
+    protected $method = array();
 
     public function enterNode(\PHPParser_Node $node)
     {
@@ -36,7 +38,7 @@ class SetterGetter extends \PHPParser_NodeVisitorAbstract
             }
         }
 
-        print_r($property);
+        $this->collector->setMutator($property);
     }
 
 }

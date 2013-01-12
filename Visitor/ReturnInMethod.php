@@ -1,15 +1,17 @@
 <?php
 
 /*
- * flyingmecha
+ * radbundle
  */
 
 namespace Trismegiste\RADBundle\Visitor;
 
+use Trismegiste\RADBundle\Generator\ClassMethodInfo;
+
 /**
  * MethodVisitor is a
  */
-class ReturnInMethod extends \PHPParser_NodeVisitorAbstract
+class ReturnInMethod extends CollectorVisitor
 {
 
     protected $currentMethod;
@@ -42,12 +44,13 @@ class ReturnInMethod extends \PHPParser_NodeVisitorAbstract
     public function afterTraverse(array $nodes)
     {
         $prettyPrinter = new \PHPParser_PrettyPrinter_Zend();
+        $result = array();
         foreach ($this->returnStmt as $methodName => $retour) {
-            echo $methodName . PHP_EOL;
             foreach ($retour as $stmt) {
-                echo '  ' . $prettyPrinter->prettyPrint(array($stmt)) . PHP_EOL;
+                $result[$methodName][] = $prettyPrinter->prettyPrint(array($stmt));
             }
         }
+        $this->collector->setReturnsFromMethod($result);
     }
 
 }

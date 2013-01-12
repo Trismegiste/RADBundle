@@ -12,7 +12,7 @@ use Trismegiste\RADBundle\Visitor;
 class EssaiTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testEcho()
+    public function notestEcho()
     {
         $fchPath = __DIR__ . '/Fixtures/Cart.php';
         $code = file_get_contents($fchPath);
@@ -37,7 +37,7 @@ class EssaiTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testXml()
+    public function notestXml()
     {
         $fchPath = __DIR__ . '/Fixtures/Cart.php';
         $code = file_get_contents($fchPath);

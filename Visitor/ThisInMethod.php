@@ -6,15 +6,17 @@
 
 namespace Trismegiste\RADBundle\Visitor;
 
+use Trismegiste\RADBundle\Generator\ClassMethodInfo;
+
 /**
- * MethodVisitor is a
+ * Search for write in the class properties
  */
-class ThisInMethod extends \PHPParser_NodeVisitorAbstract
+class ThisInMethod extends CollectorVisitor
 {
 
     protected $currentMethod;
     protected $currentParent = array();
-    public $filtered = array();
+    protected $filtered = array();
     protected $currentWrite;
 
     public function enterNode(\PHPParser_Node $node)
@@ -88,13 +90,14 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
 
     public function afterTraverse(array $nodes)
     {
+        $result = array();
         $prettyPrinter = new \PHPParser_PrettyPrinter_Zend();
         foreach ($this->filtered as $methodName => $retour) {
-            echo $methodName . PHP_EOL;
             foreach ($retour as $stmt) {
-                echo '  ' . $prettyPrinter->prettyPrintExpr($stmt) . PHP_EOL;
+                $result[$methodName][] = $prettyPrinter->prettyPrintExpr($stmt);
             }
         }
+        $this->collector->setWriteInMethod($result);
     }
 
 }

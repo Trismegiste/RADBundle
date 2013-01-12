@@ -6,14 +6,16 @@
 
 namespace Trismegiste\RADBundle\Visitor;
 
+use Trismegiste\RADBundle\Generator\ClassMethodInfo;
+
 /**
  * MethodVisitor is a
  */
-class ThrowInMethod extends \PHPParser_NodeVisitorAbstract
+class ThrowInMethod extends CollectorVisitor
 {
 
     protected $currentMethod;
-    public $filtered = array();
+    protected $filtered = array();
 
     public function enterNode(\PHPParser_Node $node)
     {
@@ -41,13 +43,14 @@ class ThrowInMethod extends \PHPParser_NodeVisitorAbstract
 
     public function afterTraverse(array $nodes)
     {
+        $result = array();
         $prettyPrinter = new \PHPParser_PrettyPrinter_Zend();
         foreach ($this->filtered as $methodName => $retour) {
-            echo $methodName . PHP_EOL;
             foreach ($retour as $stmt) {
-                echo '  ' . $prettyPrinter->prettyPrint(array($stmt)) . PHP_EOL;
+                $result[$methodName][] = $prettyPrinter->prettyPrint(array($stmt));
             }
         }
+        $this->collector->setThrowsFromMethod($result);
     }
 
 }
