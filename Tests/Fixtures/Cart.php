@@ -7,7 +7,9 @@ class Cart
 
     public $info = '';
     protected $address;
+    protected $address2;
     private $row = array();
+    protected $cmpt = 0;
 
     public function __construct($addr)
     {
@@ -26,7 +28,14 @@ class Cart
 
     public function setAddress($adr)
     {
-        $this->address = $adr;
+        if (empty($adr)) {
+            throw new \InvalidArgumentException();
+        }
+        $this->address2 = $this->address = $adr;
+    }
+    
+    public function inc(){
+        $this->cmpt += 1;
     }
 
 }

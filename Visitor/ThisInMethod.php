@@ -15,6 +15,7 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
     protected $currentMethod;
     protected $currentParent = array();
     public $filtered = array();
+    protected $currentAssign;
 
     public function enterNode(\PHPParser_Node $node)
     {
@@ -24,12 +25,25 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
                 $this->currentMethod = $node->name;
                 break;
 
+            case 'Expr_Assign':
+                $this->currentAssign = $node->var;
+                break;
+
             case 'Expr_Variable':
-                if (!isset($this->currentMethod)) {
-                    throw new \RuntimeException('No current method (odd)');
-                }
-                if($node->name == 'this') {
-                    $this->filtered[$this->currentMethod][] = $this->currentParent[0];
+                if ($node->name == 'this') {
+                    // verrif
+                    if (!isset($this->currentMethod)) {
+                        throw new \RuntimeException('No current method (odd)');
+                    }
+                    // assign ?
+                    if (isset($this->currentAssign)) {
+                        // parcours
+                        foreach ($this->currentParent as $parent) {
+                            if (($parent == $this->currentAssign)) {
+                                $this->filtered[$this->currentMethod][] = $this->currentAssign;
+                            }
+                        }
+                    }
                 }
                 break;
         }
@@ -39,8 +53,15 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
 
     public function leaveNode(\PHPParser_Node $node)
     {
-        if ($node->getType() == 'Stmt_ClassMethod') {
-            unset($this->currentMethod);
+        switch ($node->getType()) {
+
+            case 'Stmt_ClassMethod' :
+                unset($this->currentMethod);
+                break;
+
+            case 'Expr_Assign' :
+                unset($this->currentAssign);
+                break;
         }
 
         array_shift($this->currentParent);
@@ -52,7 +73,7 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
         foreach ($this->filtered as $methodName => $retour) {
             echo $methodName . PHP_EOL;
             foreach ($retour as $stmt) {
-                echo '  ' . $prettyPrinter->prettyPrint(array($stmt)) . PHP_EOL;
+                echo '  ' . $prettyPrinter->prettyPrintExpr($stmt) . PHP_EOL;
             }
         }
     }
