@@ -15,12 +15,13 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
     protected $currentMethod;
     protected $currentParent = array();
     public $filtered = array();
-    protected $currentAssign;
-    protected $currentIncDec;
+    protected $currentWrite;
 
     public function enterNode(\PHPParser_Node $node)
     {
-        switch ($node->getType()) {
+        $op = $node->getType();
+
+        switch ($op) {
 
             case 'Stmt_ClassMethod' :
                 $this->currentMethod = $node->name;
@@ -33,20 +34,11 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
                         throw new \RuntimeException('No current method (odd)');
                     }
                     // assign ?
-                    if (isset($this->currentAssign)) {
+                    foreach ($this->currentWrite as $curr) {
                         // parcours
                         foreach ($this->currentParent as $parent) {
-                            if (($parent == $this->currentAssign)) {
-                                $this->filtered[$this->currentMethod][] = $this->currentAssign;
-                            }
-                        }
-                    }
-                    // inc dec ?
-                    if (isset($this->currentIncDec)) {
-                        // parcours
-                        foreach ($this->currentParent as $parent) {
-                            if (($parent == $this->currentIncDec)) {
-                                $this->filtered[$this->currentMethod][] = $this->currentIncDec;
+                            if (($parent == $curr)) {
+                                $this->filtered[$this->currentMethod][] = $curr;
                             }
                         }
                     }
@@ -57,12 +49,12 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
             case 'Expr_PostDec' :
             case 'Expr_PreInc' :
             case 'Expr_PreDec' :
-                $this->currentIncDec = $node->var;
+                $this->currentWrite[$op] = $node->var;
                 break;
 
             default:
-                if (preg_match('#^Expr_Assign#', $node->getType())) {
-                    $this->currentAssign = $node->var;
+                if (preg_match('#^Expr_Assign#', $op)) {
+                    $this->currentWrite[$op] = $node->var;
                 }
         }
 
@@ -71,7 +63,8 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
 
     public function leaveNode(\PHPParser_Node $node)
     {
-        switch ($node->getType()) {
+        $op = $node->getType();
+        switch ($op) {
 
             case 'Stmt_ClassMethod' :
                 unset($this->currentMethod);
@@ -81,12 +74,12 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
             case 'Expr_PostDec' :
             case 'Expr_PreInc' :
             case 'Expr_PreDec' :
-                unset($this->currentIncDec);
+                unset($this->currentWrite[$op]);
                 break;
 
             default:
-                if (preg_match('#^Expr_Assign#', $node->getType())) {
-                    unset($this->currentAssign);
+                if (preg_match('#^Expr_Assign#', $op)) {
+                    unset($this->currentWrite[$op]);
                 }
         }
 
