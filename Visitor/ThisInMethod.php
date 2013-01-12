@@ -16,6 +16,7 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
     protected $currentParent = array();
     public $filtered = array();
     protected $currentAssign;
+    protected $currentIncDec;
 
     public function enterNode(\PHPParser_Node $node)
     {
@@ -23,10 +24,6 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
 
             case 'Stmt_ClassMethod' :
                 $this->currentMethod = $node->name;
-                break;
-
-            case 'Expr_Assign':
-                $this->currentAssign = $node->var;
                 break;
 
             case 'Expr_Variable':
@@ -44,8 +41,29 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
                             }
                         }
                     }
+                    // inc dec ?
+                    if (isset($this->currentIncDec)) {
+                        // parcours
+                        foreach ($this->currentParent as $parent) {
+                            if (($parent == $this->currentIncDec)) {
+                                $this->filtered[$this->currentMethod][] = $this->currentIncDec;
+                            }
+                        }
+                    }
                 }
                 break;
+
+            case 'Expr_PostInc' :
+            case 'Expr_PostDec' :
+            case 'Expr_PreInc' :
+            case 'Expr_PreDec' :
+                $this->currentIncDec = $node->var;
+                break;
+
+            default:
+                if (preg_match('#^Expr_Assign#', $node->getType())) {
+                    $this->currentAssign = $node->var;
+                }
         }
 
         array_unshift($this->currentParent, $node);
@@ -59,9 +77,17 @@ class ThisInMethod extends \PHPParser_NodeVisitorAbstract
                 unset($this->currentMethod);
                 break;
 
-            case 'Expr_Assign' :
-                unset($this->currentAssign);
+            case 'Expr_PostInc' :
+            case 'Expr_PostDec' :
+            case 'Expr_PreInc' :
+            case 'Expr_PreDec' :
+                unset($this->currentIncDec);
                 break;
+
+            default:
+                if (preg_match('#^Expr_Assign#', $node->getType())) {
+                    unset($this->currentAssign);
+                }
         }
 
         array_shift($this->currentParent);

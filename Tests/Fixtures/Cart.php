@@ -33,9 +33,20 @@ class Cart
         }
         $this->address2 = $this->address = $adr;
     }
-    
-    public function inc(){
-        $this->cmpt += 1;
+
+    public function inc()
+    {
+        $this->cmpt++;
+    }
+
+    public function addAddress($str)
+    {
+        $this->address .= $str;
+    }
+
+    public function negativeFalse()
+    {
+        $row[$this->cmpt] = 42;
     }
 
 }

@@ -22,12 +22,13 @@ class EssaiTest extends \PHPUnit_Framework_TestCase
         try {
             $stmts = $parser->parse($code);
             $traverser = new \PHPParser_NodeTraverser();
+            $traverser->addVisitor(new \PHPParser_NodeVisitor_NameResolver());
+            $traverser->traverse($stmts);
             $traverser->addVisitor(new Visitor\SetterGetter());
             $traverser->addVisitor(new Visitor\ReturnInMethod());
             $traverser->addVisitor(new Visitor\ThrowInMethod());
             $traverser->addVisitor(new Visitor\ThisInMethod());
             // checker les new
-            // checker les write en plus de checker les return (read)
             // faire des mockup pour les param objet des methodes
             // traverse
             $traverser->traverse($stmts);
@@ -36,7 +37,7 @@ class EssaiTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function notestXml()
+    public function testXml()
     {
         $fchPath = __DIR__ . '/Fixtures/Cart.php';
         $code = file_get_contents($fchPath);
@@ -48,13 +49,13 @@ class EssaiTest extends \PHPUnit_Framework_TestCase
             $serializer = new \PHPParser_Serializer_XML();
             $dumpXml = $serializer->serialize($stmts);
             file_put_contents($fchPath . '.xml', $dumpXml);
-            $doc = new \DOMDocument();
-            $doc->loadXML($dumpXml);
-            $xpath = new \DOMXPath($doc);
-            $result = $xpath->evaluate('//node:Expr_Assign/subNode:var//node:Expr_Variable/::parent');
-            foreach ($result as $node) {
-                echo '*' . $node->nodeValue . PHP_EOL;
-            }
+//            $doc = new \DOMDocument();
+//            $doc->loadXML($dumpXml);
+//            $xpath = new \DOMXPath($doc);
+//            $result = $xpath->evaluate('//node:Expr_Assign/subNode:var//node:Expr_Variable/::parent');
+//            foreach ($result as $node) {
+//                echo '*' . $node->nodeValue . PHP_EOL;
+//            }
         } catch (\PHPParser_Error $e) {
             echo 'Parse Error: ', $e->getMessage();
         }
