@@ -18,6 +18,7 @@ class ClassCollectorTest extends \PHPUnit_Framework_TestCase
         $code = file_get_contents($fchPath);
         $collector = new \Trismegiste\RADBundle\Generator\ClassCollector();
         $info = $collector->collect($code);
+
         $this->assertEquals(array(
             'classname' => 'Cart',
             'namespace' => array(
@@ -63,19 +64,30 @@ class ClassCollectorTest extends \PHPUnit_Framework_TestCase
                     0 => '$row[$this->cmpt]',
                 ),
             ),
-            'method' => array(
+            'method' =>
+            array(
                 '__construct' => array(
-                    0 => '',
+                    'addr' =>
+                    array('type' => '',),
                 ),
                 'addItem' => array(
-                    0 => '',
-                    1 => 'Trismegiste\\RADBundle\\Tests\\Fixtures\\Product',
+                    'qt' => array('type' => '',),
+                    'pro' => array('type' => 'Trismegiste\\RADBundle\\Tests\\Fixtures\\Product',),
                 ),
                 'setAddress' => array(
-                    0 => '',
+                    'adr' => array('type' => '',),
                 ),
                 'addAddress' => array(
-                    0 => '',
+                    'str' => array('type' => '',),
+                ),
+                'calling' => array(
+                    'doc' => array(
+                        'type' => 'Trismegiste\\RADBundle\\Tests\\Fixtures\\Inner',
+                        'call' =>
+                        array(
+                            'save' => true,
+                        ),
+                    ),
                 ),
             ),
                 )

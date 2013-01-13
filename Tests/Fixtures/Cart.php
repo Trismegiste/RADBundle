@@ -48,10 +48,15 @@ class Cart
     {
         $row[$this->cmpt] = 42;
     }
-    
+
     protected function untested()
     {
         return 4;
+    }
+
+    public function calling(Inner $doc)
+    {
+        $doc->save();
     }
 
 }
