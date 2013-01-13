@@ -21,6 +21,8 @@ class ClassCollector implements ClassMethodInfo
     protected $returnsInMethod;
     protected $throwsInMethod;
     protected $writeInMethod;
+    protected $namespace;
+    protected $classname;
 
     public function setSignature(array $arr)
     {
@@ -47,6 +49,16 @@ class ClassCollector implements ClassMethodInfo
         $this->writeInMethod = $arr;
     }
 
+    public function setClassname($str)
+    {
+        $this->classname = $str;
+    }
+
+    public function setNamespace($str)
+    {
+        $this->namespace = $str;
+    }
+
     protected function parseClass($code)
     {
         $parser = new \PHPParser_Parser(new \PHPParser_Lexer);
@@ -56,6 +68,7 @@ class ClassCollector implements ClassMethodInfo
             $traverser = new \PHPParser_NodeTraverser();
             $traverser->addVisitor(new \PHPParser_NodeVisitor_NameResolver());
             $traverser->traverse($stmts);
+            $traverser->addVisitor(new Visitor\Classname($this));
             $traverser->addVisitor(new Visitor\SetterGetter($this));
             $traverser->addVisitor(new Visitor\SignatureMethod($this));
             $traverser->addVisitor(new Visitor\ReturnInMethod($this));
@@ -73,6 +86,16 @@ class ClassCollector implements ClassMethodInfo
     public function collect($str)
     {
         $this->parseClass($str);
+        
+        return array(
+            'classname' => $this->classname,
+            'namespace' => $this->namespace,
+            'mutator' => $this->mutator,
+            'return' => $this->returnsInMethod,
+            'throw' => $this->throwsInMethod,
+            'write' => $this->writeInMethod,
+            'method' => $this->publicSignature
+        );
     }
 
 }

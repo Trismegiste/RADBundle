@@ -17,8 +17,69 @@ class ClassCollectorTest extends \PHPUnit_Framework_TestCase
         $fchPath = __DIR__ . '/../Fixtures/Cart.php';
         $code = file_get_contents($fchPath);
         $collector = new \Trismegiste\RADBundle\Generator\ClassCollector();
-        $collector->collect($code);
-        print_r($collector);
+        $info = $collector->collect($code);
+        $this->assertEquals(array(
+            'classname' => 'Cart',
+            'namespace' => array(
+                0 => 'Trismegiste',
+                1 => 'RADBundle',
+                2 => 'Tests',
+                3 => 'Fixtures',
+            ),
+            'mutator' => array(
+                0 => 'address',
+            ),
+            'return' => array(
+                'getAddress' => array(
+                    0 => 'return $this->address;',
+                ),
+                'untested' => array(
+                    0 => 'return 4;',
+                ),
+            ),
+            'throw' => array(
+                'setAddress' => array(
+                    0 => 'throw new \\InvalidArgumentException();',
+                ),
+            ),
+            'write' => array(
+                '__construct' => array(
+                    0 => '$this->address',
+                ),
+                'addItem' => array(
+                    0 => '$this->row[]',
+                ),
+                'setAddress' => array(
+                    0 => '$this->address2',
+                    1 => '$this->address',
+                ),
+                'inc' => array(
+                    0 => '$this->cmpt',
+                ),
+                'addAddress' => array(
+                    0 => '$this->address',
+                ),
+                'negativeFalse' => array(
+                    0 => '$row[$this->cmpt]',
+                ),
+            ),
+            'method' => array(
+                '__construct' => array(
+                    0 => '',
+                ),
+                'addItem' => array(
+                    0 => '',
+                    1 => 'Trismegiste\\RADBundle\\Tests\\Fixtures\\Product',
+                ),
+                'setAddress' => array(
+                    0 => '',
+                ),
+                'addAddress' => array(
+                    0 => '',
+                ),
+            ),
+                )
+                , $info);
     }
 
 }
