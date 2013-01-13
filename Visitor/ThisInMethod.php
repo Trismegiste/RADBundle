@@ -6,8 +6,6 @@
 
 namespace Trismegiste\RADBundle\Visitor;
 
-use Trismegiste\RADBundle\Generator\ClassMethodInfo;
-
 /**
  * Search for write in the class properties
  */

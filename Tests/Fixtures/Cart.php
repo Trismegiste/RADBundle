@@ -16,7 +16,7 @@ class Cart
         $this->address = $addr;
     }
 
-    public function addItem($qt, Product $pro)
+    public function addItem($qt, Product $pro, $info = '')
     {
         $this->row[] = array('qt' => $qt, 'item' => $pro);
     }
@@ -47,6 +47,11 @@ class Cart
     public function negativeFalse()
     {
         $row[$this->cmpt] = 42;
+    }
+    
+    protected function untested()
+    {
+        return 4;
     }
 
 }

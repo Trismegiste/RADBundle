@@ -6,8 +6,6 @@
 
 namespace Trismegiste\RADBundle\Visitor;
 
-use Trismegiste\RADBundle\Generator\ClassMethodInfo;
-
 /**
  * SetterGetter do a match between getter and setter
  */

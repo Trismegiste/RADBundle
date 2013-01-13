@@ -16,10 +16,16 @@ use Trismegiste\RADBundle\Visitor;
 class ClassCollector implements ClassMethodInfo
 {
 
+    protected $publicSignature;
     protected $mutator;
     protected $returnsInMethod;
     protected $throwsInMethod;
     protected $writeInMethod;
+
+    public function setSignature(array $arr)
+    {
+        $this->publicSignature = $arr;
+    }
 
     public function setMutator(array $methodName)
     {
@@ -51,6 +57,7 @@ class ClassCollector implements ClassMethodInfo
             $traverser->addVisitor(new \PHPParser_NodeVisitor_NameResolver());
             $traverser->traverse($stmts);
             $traverser->addVisitor(new Visitor\SetterGetter($this));
+            $traverser->addVisitor(new Visitor\SignatureMethod($this));
             $traverser->addVisitor(new Visitor\ReturnInMethod($this));
             $traverser->addVisitor(new Visitor\ThrowInMethod($this));
             $traverser->addVisitor(new Visitor\ThisInMethod($this));

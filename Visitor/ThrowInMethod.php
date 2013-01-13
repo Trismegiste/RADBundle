@@ -6,8 +6,6 @@
 
 namespace Trismegiste\RADBundle\Visitor;
 
-use Trismegiste\RADBundle\Generator\ClassMethodInfo;
-
 /**
  * MethodVisitor is a
  */
