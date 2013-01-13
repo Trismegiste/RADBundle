@@ -89,6 +89,9 @@ class ClassCollectorTest extends \PHPUnit_Framework_TestCase
                         ),
                     ),
                 ),
+                'getAddress' => array(),
+                'inc' => array(),
+                'negativeFalse' => array()
             ),
                 )
                 , $info);

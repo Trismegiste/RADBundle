@@ -21,6 +21,7 @@ class SignatureMethod extends CollectorVisitor
             case 'Stmt_ClassMethod' :
                 if ($node->type == 1) {
                     $this->currentMethod = $node->name;
+                    $this->method[$node->name] = array();
                     foreach ($node->params as $arg) {
                         $typing = '';
                         if (!is_null($arg->default))
