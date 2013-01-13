@@ -10,7 +10,8 @@
     }
     ],
     "require": {
-        "php": ">=5.3.8"
+        "php": ">=5.3.8",
+        "nikic/php-parser": "0.9.3"
     },
     "require-dev": {
         "symfony/framework-bundle": ">=2.1,<2.2-dev"
