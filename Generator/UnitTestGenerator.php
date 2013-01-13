@@ -32,7 +32,18 @@ class UnitTestGenerator
                         ->extend('\PHPUnit_Framework_TestCase')->getNode();
 
         $container = new \PHPParser_Node_Stmt_Namespace(new \PHPParser_Node_Name($info['namespace']));
-        $container->stmts = array($testClass);
+        $fqcn = $info['namespace'];
+        $fqcn[] = $info['classname'];
+        $container->stmts[] = new \PHPParser_Node_Stmt_Use(array(new \PHPParser_Node_Stmt_UseUse(new \PHPParser_Node_Name($fqcn))));
+        $container->stmts[] = $testClass;
+        
+        $testClass->stmts[] =$this->factory->method('getInstance')
+                ->addStmt(new \PHPParser_Node_Expr_Assign(
+                        new \PHPParser_Node_Expr_Variable('obj'),
+                        new \PHPParser_Node_Expr_New(new \PHPParser_Node_Name($info['classname']))
+                        ))
+                ->addStmt(new \PHPParser_Node_Stmt_Return(new \PHPParser_Node_Expr_Variable('obj')))
+                ->getNode();
 
         foreach ($info['method'] as $method => $args) {
             $testClass->stmts[] = $this->getMethod($method);
