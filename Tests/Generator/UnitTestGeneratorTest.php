@@ -19,10 +19,10 @@ class UnitTestGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         $generator = new UnitTestGenerator();
-        $fchPath = __DIR__ . '/../Fixtures/Cart.php';
+        $fchPath = __DIR__ . '/../Fixtures/CheckConstruct.php';
         $code = file_get_contents($fchPath);
         $content = $generator->generate($code);
-        file_put_contents(dirname($fchPath) . '/CartTest.php', $content);
+        file_put_contents(dirname($fchPath) . '/CheckConstructTest.php', $content);
     }
 
 }

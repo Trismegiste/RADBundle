@@ -25,7 +25,7 @@ class <?php echo $info['classname'] ?>Test extends \PHPUnit_Framework_TestCase
 
                 if (strlen($argInfo['type'])) { ?>
                     $<?php echo $argName ?> = $this->getMock('<?php echo $argInfo['type'] ?>'
-                    <?php if (!isset($argInfo['call'])) : ?>
+                    <?php if (isset($argInfo['call'])) : ?>
                         , array(<?php echo implode(array_map(function($val) { return "'$val'"; } , $argInfo['call'])) ?>
                     <?php else : ?>
                         , array()
