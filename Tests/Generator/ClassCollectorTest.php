@@ -67,8 +67,7 @@ class ClassCollectorTest extends \PHPUnit_Framework_TestCase
             'method' =>
             array(
                 '__construct' => array(
-                    'addr' =>
-                    array('type' => '',),
+                    'addr' => array('type' => '',),
                 ),
                 'addItem' => array(
                     'qt' => array('type' => '',),
@@ -83,11 +82,8 @@ class ClassCollectorTest extends \PHPUnit_Framework_TestCase
                 'calling' => array(
                     'doc' => array(
                         'type' => 'Trismegiste\\RADBundle\\Tests\\Fixtures\\Inner',
-                        'call' =>
-                        array(
-                            'save' => true,
-                        ),
-                    ),
+                        'call' => array('save' => true)
+                    )
                 ),
                 'getAddress' => array(),
                 'inc' => array(),

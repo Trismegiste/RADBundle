@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../vendor/PHP-Parser/lib/bootstrap.php';
+if (!class_exists('PHPParser_Autoloader')) {
+    require_once __DIR__ . '/../../../../../nikic/php-parser/lib/bootstrap.php';
+}
 
 spl_autoload_register(function ($class) {
             if (preg_match('#^Trismegiste\\\\RADBundle\\\\(.+)$#', $class, $ret)) {
