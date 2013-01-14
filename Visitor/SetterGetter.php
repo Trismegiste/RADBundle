@@ -16,7 +16,7 @@ class SetterGetter extends CollectorVisitor
 
     public function enterNode(\PHPParser_Node $node)
     {
-        if ($node->getType() == 'Stmt_ClassMethod') {
+        if (($node->getType() == 'Stmt_ClassMethod') && ($node->type == 1)) {
             if (preg_match('#[s|g]et[A-Z][0-9A-Za-z]#', $methodName = $node->name)) {
                 $this->method[] = $methodName;
             }

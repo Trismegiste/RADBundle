@@ -63,5 +63,39 @@ class <?php echo $info['classname'] ?>Test extends \PHPUnit_Framework_TestCase
     }
     <?php } ?>
 
+    <?php foreach($info['mutator'] as $property) : ?>
+     /**
+     * Testing mutator for property : <?= $property . PHP_EOL ?>
+     */
+    public function testProperty<?= ucfirst($property) ?>()
+    {
+        <?php
+        $setter = 'set' . ucfirst($property);
+        $getter = 'get' . ucfirst($property);
+        $compilParam = dumpCalling('set'. ucfirst($setter), $info['method'][$setter])
+        ?>
+        $this->instance-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
+        $this->assertEquals(<?= $compilParam[0] ?>, $this->instance-><?= $getter ?>());
+        $this->assertNotEquals(666, $this->instance-><?= $getter ?>());
+    }
+    <?php endforeach ?>
+
+    <?php foreach($info['throw'] as $method => $stmts) : ?>
+        <?php foreach($stmts as $idx => $oneThrow) : ?>
+        /**
+         * In method <?= $method . PHP_EOL ?>
+         * Cover exception for <?= $oneThrow . PHP_EOL ?>
+         *
+         * @expectedException XXXXXXXXXX
+         */
+        public function test<?= $method ?>Throws<?= $idx ?>()
+        {
+            <?php $compilParam = dumpCalling($method, $info['method'][$method]) ?>
+            // do something
+            $this->instance-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
+        }
+        <?php endforeach ?>
+    <?php endforeach ?>
+
 }
 
