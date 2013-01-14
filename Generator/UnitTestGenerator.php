@@ -14,7 +14,7 @@ namespace Trismegiste\RADBundle\Generator;
 class UnitTestGenerator
 {
 
-    public function generate($str)
+    public function generate($str, array $rootNamespace = array())
     {
         $collector = new ClassCollector();
         $info = $collector->collect($str);
@@ -22,6 +22,10 @@ class UnitTestGenerator
         $fqcnTestedClass = $info['namespace'];
         $fqcnTestedClass[] = $info['classname'];
         $fqcnTestedClass = implode('\\', $fqcnTestedClass);
+
+        $namespace4Test = $rootNamespace;
+        $namespace4Test[] = 'Tests';
+        array_splice($namespace4Test, count($namespace4Test), 0, array_diff_assoc($info['namespace'], $rootNamespace));
 
         ob_start();
         require(__DIR__ . '/../Resources/skeleton/test/SmartTest.php');

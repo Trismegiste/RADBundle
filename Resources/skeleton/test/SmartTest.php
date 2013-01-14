@@ -1,7 +1,7 @@
 <?php require __DIR__ . '/BuildCallingMethod.php' ?>
 <?php echo '<?php' ?>
 
-namespace <?php echo implode('\\',$info['namespace']) ?>;
+namespace <?php echo implode('\\', $namespace4Test) ?>;
 
 use <?php echo $fqcnTestedClass ?>;
 

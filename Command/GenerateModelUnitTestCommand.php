@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Command\Command;
-use Trismegiste\RADBundle\Visitor;
+use Trismegiste\RADBundle\Generator\UnitTestGenerator;
 
 /**
  * GenerateModelUnitTest is a ...
@@ -50,24 +50,11 @@ EOT
         $modelClass = $input->getArgument('model');
         list($bundleName, $className) = explode(':', $modelClass);
         $bundle = $this->getApplication()->getKernel()->getBundle($bundleName);
-        $fchPath = $bundle->getPath() . '/Model/' . $className . '.php';
+        $fchPath = $bundle->getPath() . '/' . $className . '.php';
         $output->writeln("Processing $fchPath");
         $code = file_get_contents($fchPath);
-
-        $parser = new \PHPParser_Parser(new \PHPParser_Lexer);
-
-        try {
-            $stmts = $parser->parse($code);
-            $traverser = new \PHPParser_NodeTraverser();
-            $traverser->addVisitor(new Visitor\SetterGetter());
-            $traverser->addVisitor(new Visitor\ReturnInMethod());
-            $traverser->addVisitor(new Visitor\ThisInMethod());
-            $traverser->addVisitor(new Visitor\ThrowInMethod());
-            // traverse
-            $traverser->traverse($stmts);
-        } catch (\PHPParser_Error $e) {
-            echo 'Parse Error: ', $e->getMessage();
-        }
+        $generator = new UnitTestGenerator();
+        $testClass = $generator->generate($code, explode('\\', $bundle->getNamespace()));
     }
 
 }
