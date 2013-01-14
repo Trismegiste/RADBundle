@@ -1,7 +1,7 @@
 <?php
 
 /*
- * flyingmecha
+ * radbundle
  */
 
 namespace Trismegiste\RADBundle\Command;
@@ -15,7 +15,8 @@ use Symfony\Component\Console\Command\Command;
 use Trismegiste\RADBundle\Generator\UnitTestGenerator;
 
 /**
- * GenerateModelUnitTest is a ...
+ * GenerateModelUnitTestCommand is a command for
+ * generation of phpunit class
  *
  * @author florent
  */
@@ -55,6 +56,8 @@ EOT
         $code = file_get_contents($fchPath);
         $generator = new UnitTestGenerator();
         $testClass = $generator->generate($code, explode('\\', $bundle->getNamespace()));
+        $destPath = $bundle->getPath() . '/Tests/' . $className . 'Test.php';
+        file_put_contents($destPath, $testClass);
     }
 
 }
