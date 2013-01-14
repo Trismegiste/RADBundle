@@ -23,7 +23,12 @@ class UnitTestGenerator
         $fqcnTestedClass[] = $info['classname'];
         $fqcnTestedClass = implode('\\', $fqcnTestedClass);
 
-        $str = require(__DIR__ . '/../Resources/skeleton/test/SmartTest.php');
+        ob_start();
+        require(__DIR__ . '/../Resources/skeleton/test/SmartTest.php');
+        $str = ob_get_contents();
+        ob_end_clean();
+
+        return $str;
     }
 
 }
