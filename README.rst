@@ -8,6 +8,29 @@ The purpose of this bundle is scaffolding :
 * unit test for a entity|document including validation tests.
 * functional tests for controller
 
+How
+---
+
+Unit test for ORM/Entity named Verify (subdirectory Entity)
+::
+  app/console test:generate:entity MyBundle:Verify
+
+Unit test for a MongoDB/Document named Verify (subdirectory Document)
+::
+  app/console test:generate:document MyBundle:Verify
+
+Unit test for a class named Verify in subdirectory Model
+::
+  app/console test:generate:document MyBundle:Model/Verify
+
+Testing the DemoController in MyBundle
+::
+  app/console test:generate:routing MyBundle:Demo
+
+Testing a set of routes of AcmeDemoBundle, filtered by a pattern
+::
+  app/console test:generate:routing --bundle AcmeDemoBundle _demo
+
 Who
 ---
 
@@ -35,10 +58,8 @@ When
 
 - You have just created your entity with strong assertions and you need to check if validations are OK now
   and will be OK in the future after any change in the code.
-- Your are in a hurry and you need to refactor one or many bundles. Then, you discover that the sub-directory DirtyBundle/Test/ is empty, you are doomed !
+- Your are in a hurry and you need to refactor one or many bundles. Then, you discover that the sub-directory DirtyBundle/Tests/ is empty, you are doomed !
 
-How
----
 Then, you have 2 choices :
 
 - refactoring without unit testing. This is like playing russian roulette with a machine gun
