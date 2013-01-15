@@ -19,9 +19,9 @@ Unit test for a MongoDB/Document named Verify (subdirectory Document)
 ::
   app/console test:generate:document MyBundle:Verify
 
-Unit test for a class named Verify in subdirectory Model
+Unit test for a class named Demo in subdirectory Service
 ::
-  app/console test:generate:document MyBundle:Model/Verify
+  app/console test:generate:class MyBundle:Service/Demo
 
 Testing the DemoController in MyBundle
 ::

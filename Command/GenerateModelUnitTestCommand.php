@@ -30,16 +30,17 @@ class GenerateModelUnitTestCommand extends Command
     {
         $this
                 ->setDefinition(array(
-                    new InputArgument('model', InputArgument::REQUIRED, 'The model class name to unit test (shortcut notation)'),
+                    new InputArgument('class', InputArgument::REQUIRED, 'The class\' name to unit test (shortcut notation)'),
                 ))
-                ->setDescription('Generates a unit testing class based on a model class')
+                ->setDescription('Generates a unit testing class based on a class (with getter/setter)')
                 ->setHelp(<<<EOT
-The <info>test:generate:model</info> command generates a unit testing class based on a model class.
+The <info>test:generate:class</info> command generates a unit testing concrete class (can be a model class or not).
+Tests getters and setters, thrown exceptions, generates mockup for constructor and methods calling...
 
-<info>php app/console test:generate:model AcmeBlogBundle:Post</info>
+<info>php app/console test:generate:class AcmeBlogBundle:Post</info>
 EOT
                 )
-                ->setName('test:generate:model')
+                ->setName('test:generate:class')
         ;
     }
 
@@ -48,7 +49,7 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $modelClass = $input->getArgument('model');
+        $modelClass = $input->getArgument('class');
         list($bundleName, $className) = explode(':', $modelClass);
         $bundle = $this->getApplication()->getKernel()->getBundle($bundleName);
         $fchPath = $bundle->getPath() . '/' . $className . '.php';
