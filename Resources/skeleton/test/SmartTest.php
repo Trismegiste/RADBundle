@@ -86,7 +86,7 @@ class <?php echo $info['classname'] ?>Test extends \PHPUnit_Framework_TestCase
          * In method <?= $method . PHP_EOL ?>
          * Cover exception for <?= $oneThrow . PHP_EOL ?>
          *
-         * @expectedException XXXXXXXXXX
+         * @expectedException \Exception
          */
         public function test<?= $method ?>Throws<?= $idx ?>()
         {

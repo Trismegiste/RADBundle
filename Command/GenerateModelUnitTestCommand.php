@@ -57,7 +57,11 @@ EOT
         $generator = new UnitTestGenerator();
         $testClass = $generator->generate($code, explode('\\', $bundle->getNamespace()));
         $destPath = $bundle->getPath() . '/Tests/' . $className . 'Test.php';
-        file_put_contents($destPath, $testClass);
+        if (!file_exists($destPath)) {
+            file_put_contents($destPath, $testClass);
+        } else {
+            $output->writeln("<error>$destPath already exists</error>");
+        }
     }
 
 }
