@@ -5,16 +5,16 @@
     "keywords": ["phpunit", "scaffolding", "symfony"],
     "authors": [
     {
-        "name": "Trismegiste",
-        "email": "florent.g@allopneus.com"
+        "name": "Trismegiste"
     }
     ],
     "require": {
-        "php": ">=5.3.8",
-        "nikic/php-parser": "0.9.3"
+        "php": ">=5.4",
+        "nikic/php-parser": "0.9.3",
+        "sensio/generator-bundle": "~2.3"
     },
     "require-dev": {
-        "symfony/framework-bundle": ">=2.1,<2.2-dev"
+        "symfony/framework-bundle": "~2.3"
     },
     "autoload": {
         "psr-0": {
