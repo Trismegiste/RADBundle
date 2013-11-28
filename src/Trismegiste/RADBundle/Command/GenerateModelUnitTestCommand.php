@@ -49,29 +49,22 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filesystem = $this->getContainer()->get('filesystem');   
-        
+        $filesystem = $this->getContainer()->get('filesystem');
+
         $modelClass = $input->getArgument('class');
         list($bundleName, $className) = explode(':', $modelClass);
         $bundle = $this->getApplication()->getKernel()->getBundle($bundleName);
 
-        $iter = $this->getContainer()->get('classfinder')
-                ->files()
-                ->in($bundle->getPath())
-                ->name($className . '.php');
+        $output->writeln("Processing $className");
 
-        foreach ($iter as $fch) {
-            $output->writeln("Processing " . $fch->getRelativePathname());
-
-            $code = $fch->getContents();
-            $generator = new UnitTestGenerator();
-            $testClass = $generator->generate($code, explode('\\', $bundle->getNamespace()));
-            $destPath = $bundle->getPath() . '/Tests/' . $className . 'Test.php';
-            if (!file_exists($destPath)) {
-                $filesystem->dumpFile($destPath, $testClass);
-            } else {
-                $output->writeln("<error>$destPath already exists</error>");
-            }
+        $code = file_get_contents($bundle->getPath() . '/' . $className . '.php');
+        $generator = new UnitTestGenerator();
+        $testClass = $generator->generate($code, explode('\\', $bundle->getNamespace()));
+        $destPath = $bundle->getPath() . '/Tests/' . $className . 'Test.php';
+        if (!file_exists($destPath)) {
+            $filesystem->dumpFile($destPath, $testClass);
+        } else {
+            $output->writeln("<error>$destPath already exists</error>");
         }
     }
 
