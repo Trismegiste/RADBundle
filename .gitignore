@@ -1,4 +1,4 @@
 /nbproject
 /vendor
-/Tests/Fixtures/Kernel/cache
-/Tests/Fixtures/Kernel/logs
+/tests/Fixtures/Kernel/cache
+/tests/Fixtures/Kernel/logs

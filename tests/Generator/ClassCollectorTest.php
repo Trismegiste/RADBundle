@@ -1,6 +1,6 @@
 <?php
 
-namespace Trismegiste\RADBundle\Tests\Generator;
+namespace tests\Generator;
 
 use Trismegiste\RADBundle\Visitor;
 

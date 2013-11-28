@@ -4,20 +4,20 @@
  * RADBundle
  */
 
-namespace Trismegiste\RADBundle\Tests\Command;
+namespace tests\Command;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Trismegiste\RADBundle\Command\GenerateRoutingTestCommand;
+use Trismegiste\RADBundle\Command\GenerateModelUnitTestCommand;
 
 /**
- * GenerateRoutingTestCommandTest tests the command GenerateRoutingTestCommand
+ * GenerateModelUnitTestCommandTest tests GenerateModelUnitTestCommand
  */
-class GenerateRoutingTestCommandTest extends WebTestCase
+class GenerateModelUnitTestCommandTest extends WebTestCase
 {
 
-    static protected $class = 'Trismegiste\RADBundle\Tests\Fixtures\Kernel\AppKernel';
+    static protected $class = 'tests\Fixtures\Kernel\AppKernel';
 
     public function testExecute()
     {
@@ -29,16 +29,16 @@ class GenerateRoutingTestCommandTest extends WebTestCase
         $mockFiler->expects($this->once())
                 ->method('dumpFile');
 
-     //   $kernel->getContainer()->set('filesystem', $mockFiler);
+        $kernel->getContainer()->set('filesystem', $mockFiler);
 
         $application = new Application($kernel);
-        $application->add(new GenerateRoutingTestCommand());
+        $application->add(new GenerateModelUnitTestCommand());
 
-        $command = $application->find('test:generate:routing');
+        $command = $application->find('test:generate:class');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'filter' => 'Trismegiste\RADBundle\Tests\Fixtures\FuncController'
+            'class' => 'TrismegisteRADBundle:Cart'
         ]);
 
         $output = $commandTester->getDisplay();

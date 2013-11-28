@@ -1,6 +1,6 @@
 <?php
 
-namespace Trismegiste\RADBundle\Tests\Fixtures;
+namespace tests\Fixtures;
 
 class FuncController
 {

@@ -4,7 +4,7 @@
  * RADBundle
  */
 
-namespace Trismegiste\RADBundle\Tests\Fixtures\Kernel;
+namespace tests\Fixtures\Kernel;
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
