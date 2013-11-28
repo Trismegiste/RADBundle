@@ -49,11 +49,6 @@ class GenerateRoutingTestCommand extends ContainerAwareCommand
             $routeFilter = $bundle->getNamespace() . '\Controller\\' . $classNameController;
             $router = $this->getContainer()->get('routing.extract.ctrl');
             $testClassName = $classNameController . 'Test';
-        } else if (class_exists($filter)) {
-            $refl = new \ReflectionClass($filter);
-            $routeFilter = $filter;
-            $testClassName = dirname($refl->getFileName()) . DIRECTORY_SEPARATOR . basename($refl->getFileName(), '.php') . 'Test';
-            $router = $this->getContainer()->get('routing.extract.ctrl');
         } else {
             if (is_null($bundle = $input->getOption('bundle'))) {
                 throw new \InvalidArgumentException('bundle option must be defined when using filter');

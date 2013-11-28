@@ -13,25 +13,28 @@ use Symfony\Component\Routing\Route;
  *
  * @author flo
  */
-abstract class RoutingFilter {
+abstract class RoutingFilter
+{
 
     protected $router;
 
-    public function __construct(Router $router) {
+    public function __construct(Router $router)
+    {
         $this->router = $router;
     }
 
     /**
-    * This is the method to implement : 
-    * Return true xor false if the $route named $name matches the string $filter
-    * You can filter the way you want with this 3 params
-    */
+     * This is the method to implement : 
+     * Return true xor false if the $route named $name matches the string $filter
+     * You can filter the way you want with this 3 params
+     */
     abstract protected function isMatching($name, Route $route, $filter);
 
-    public function getExtract($filter) {
+    public function getExtract($filter)
+    {
         $routes = array();
         foreach ($this->router->getRouteCollection()->all() as $name => $defRoute) {
-            print_r($defRoute);
+
             if ($this->isMatching($name, $defRoute, $filter)) {
                 $url = $defRoute->getPath();
                 $url = preg_replace('#(\{([_aA-zZ]+)\})#', '\$$2', $url);
@@ -43,7 +46,8 @@ abstract class RoutingFilter {
                 }
 
                 $listVar = array();
-                foreach ($defRoute->getCompiledRoute()->getVariables() as $varName) {
+                $compiled = $defRoute->compile();
+                foreach ($compiled->getVariables() as $varName) {
                     $listVar[$varName] = isset($requirements[$varName]) ? $requirements[$varName] : '*';
                 }
 
@@ -52,7 +56,7 @@ abstract class RoutingFilter {
                 }
             }
         }
-        
+
         return $routes;
     }
 

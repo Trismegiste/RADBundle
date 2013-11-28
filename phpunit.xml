@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
+    <php>
+         <server name="KERNEL_DIR" value="./tests/Fixtures/Kernel/" />
+    </php>
+    
     <testsuites>
         <testsuite name="RADBundle unit and func tests">
             <directory>./tests</directory>

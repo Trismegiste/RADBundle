@@ -4,8 +4,6 @@
  * RADBundle
  */
 
-namespace tests\Fixtures\Kernel;
-
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

@@ -17,8 +17,6 @@ use Trismegiste\RADBundle\Command\GenerateRoutingTestCommand;
 class GenerateRoutingTestCommandTest extends WebTestCase
 {
 
-    static protected $class = 'tests\Fixtures\Kernel\AppKernel';
-
     public function testExecute()
     {
         $kernel = self::createKernel();
@@ -29,7 +27,7 @@ class GenerateRoutingTestCommandTest extends WebTestCase
         $mockFiler->expects($this->once())
                 ->method('dumpFile');
 
-     //   $kernel->getContainer()->set('filesystem', $mockFiler);
+        $kernel->getContainer()->set('filesystem', $mockFiler);
 
         $application = new Application($kernel);
         $application->add(new GenerateRoutingTestCommand());
@@ -38,11 +36,11 @@ class GenerateRoutingTestCommandTest extends WebTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'filter' => 'Trismegiste\RADBundle\Tests\Fixtures\FuncController'
+            'filter' => 'AlphaBundle:Func'
         ]);
 
         $output = $commandTester->getDisplay();
-        $this->assertRegExp('#Processing Tests/Fixtures/Cart.php#', $output);
+        $this->assertRegExp('#FuncControllerTest.php class file#', $output);
     }
 
 }

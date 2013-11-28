@@ -1,3 +1,3 @@
 route_alpha:
     pattern:   /alpha
-    defaults:  { _controller: Trismegiste\RADBundle\Tests\Fixtures\FuncController::indexAction }
+    defaults:  { _controller: AlphaBundle:Func:index }

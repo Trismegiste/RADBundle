@@ -13,12 +13,11 @@ class RoutingTestGenerator extends SensioGenerator
 {
 
     private $filesystem;
-    private $skeletonDir;
 
     public function __construct(Filesystem $filesystem, $skeletonDir)
     {
         $this->filesystem = $filesystem;
-        $this->skeletonDir = $skeletonDir;
+        $this->setSkeletonDirs($skeletonDir);
     }
 
     /**
@@ -35,7 +34,7 @@ class RoutingTestGenerator extends SensioGenerator
             throw new \RuntimeException(sprintf('Unable to generate the %s test class as it already exists', $filePath));
         }
 
-        $this->renderFile($this->skeletonDir, 'RoutingTest.php.twig', $filePath, array(
+        $this->renderFile('RoutingTest.php.twig', $filePath, array(
             'testClassName' => $className,
             'routes' => $routeCollection,
             'bundleNamespace' => $bundle->getNamespace()));

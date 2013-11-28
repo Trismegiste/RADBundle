@@ -17,8 +17,6 @@ use Trismegiste\RADBundle\Command\GenerateModelUnitTestCommand;
 class GenerateModelUnitTestCommandTest extends WebTestCase
 {
 
-    static protected $class = 'tests\Fixtures\Kernel\AppKernel';
-
     public function testExecute()
     {
         $kernel = self::createKernel();
