@@ -25,6 +25,12 @@ class GenerateModelUnitTestCommandTest extends WebTestCase
         $kernel->boot();
         $kernel->registerBundles();
 
+        $mockFiler = $this->getMock('Symfony\Component\Filesystem\Filesystem');
+        $mockFiler->expects($this->once())
+                ->method('dumpFile');
+
+        $kernel->getContainer()->set('filesystem', $mockFiler);
+
         $application = new Application($kernel);
         $application->add(new GenerateModelUnitTestCommand());
 
@@ -35,9 +41,8 @@ class GenerateModelUnitTestCommandTest extends WebTestCase
             'class' => 'TrismegisteRADBundle:Cart'
         ]);
 
-        echo $commandTester->getDisplay();
-
-        // ...
+        $output = $commandTester->getDisplay();
+        $this->assertRegExp('#Processing Tests/Fixtures/Cart.php#', $output);
     }
 
 }

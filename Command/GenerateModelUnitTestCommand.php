@@ -49,7 +49,8 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filesystem = $this->getContainer()->get('filesystem');
+        $filesystem = $this->getContainer()->get('filesystem');   
+        
         $modelClass = $input->getArgument('class');
         list($bundleName, $className) = explode(':', $modelClass);
         $bundle = $this->getApplication()->getKernel()->getBundle($bundleName);
@@ -57,10 +58,10 @@ EOT
         $iter = $this->getContainer()->get('classfinder')
                 ->files()
                 ->in($bundle->getPath())
-                ->name($className . '*');
+                ->name($className . '.php');
 
         foreach ($iter as $fch) {
-            $output->writeln("Processing " . $fch->getRelativePath());
+            $output->writeln("Processing " . $fch->getRelativePathname());
 
             $code = $fch->getContents();
             $generator = new UnitTestGenerator();
