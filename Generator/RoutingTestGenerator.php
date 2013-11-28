@@ -7,8 +7,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 /**
- * Generates a test class based on a Doctrine entity.
- *
+ * Generates a functional test class based on routes
  */
 class RoutingTestGenerator extends SensioGenerator
 {
@@ -40,6 +39,14 @@ class RoutingTestGenerator extends SensioGenerator
             'testClassName' => $className,
             'routes' => $routeCollection,
             'bundleNamespace' => $bundle->getNamespace()));
+    }
+
+    /**
+     * Override the rendering into file with the filesystem service
+     */
+    protected function renderFile($template, $target, $parameters)
+    {
+        return $this->filesystem->dumpFile($target, $this->render($template, $parameters));
     }
 
 }

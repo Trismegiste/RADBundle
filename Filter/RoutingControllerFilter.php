@@ -11,9 +11,11 @@ use Symfony\Component\Routing\Route;
  *
  * @author flo
  */
-class RoutingControllerFilter extends RoutingFilter {
+class RoutingControllerFilter extends RoutingFilter
+{
 
-    protected function isMatching($name, Route $route, $filter) {
+    protected function isMatching($name, Route $route, $filter)
+    {
         $def = $route->getDefaults();
         list($ctrlRoute, $action) = explode('::', $def['_controller']);
         return $filter == $ctrlRoute;

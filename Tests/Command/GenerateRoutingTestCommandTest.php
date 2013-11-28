@@ -29,7 +29,7 @@ class GenerateRoutingTestCommandTest extends WebTestCase
         $mockFiler->expects($this->once())
                 ->method('dumpFile');
 
-        $kernel->getContainer()->set('filesystem', $mockFiler);
+     //   $kernel->getContainer()->set('filesystem', $mockFiler);
 
         $application = new Application($kernel);
         $application->add(new GenerateRoutingTestCommand());
@@ -38,7 +38,7 @@ class GenerateRoutingTestCommandTest extends WebTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'filter' => 'TrismegisteRADBundle:Func'
+            'filter' => 'Trismegiste\RADBundle\Tests\Fixtures\FuncController'
         ]);
 
         $output = $commandTester->getDisplay();

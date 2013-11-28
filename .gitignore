@@ -1,2 +1,4 @@
 /nbproject
 /vendor
+/Tests/Fixtures/Kernel/cache
+/Tests/Fixtures/Kernel/logs

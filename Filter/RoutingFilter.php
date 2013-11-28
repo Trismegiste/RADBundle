@@ -24,16 +24,16 @@ abstract class RoutingFilter {
     /**
     * This is the method to implement : 
     * Return true xor false if the $route named $name matches the string $filter
-    * You can filter the way you want with this 3 params, even return a random !
+    * You can filter the way you want with this 3 params
     */
     abstract protected function isMatching($name, Route $route, $filter);
 
     public function getExtract($filter) {
         $routes = array();
         foreach ($this->router->getRouteCollection()->all() as $name => $defRoute) {
-            $testRoute = $defRoute->compile();
-            if ($this->isMatching($name, $testRoute->getRoute(), $filter)) {
-                $url = $testRoute->getPattern();
+            print_r($defRoute);
+            if ($this->isMatching($name, $defRoute, $filter)) {
+                $url = $defRoute->getPath();
                 $url = preg_replace('#(\{([_aA-zZ]+)\})#', '\$$2', $url);
                 $requirements = $defRoute->getRequirements();
                 if (!isset($requirements['_method'])) {
@@ -43,7 +43,7 @@ abstract class RoutingFilter {
                 }
 
                 $listVar = array();
-                foreach ($testRoute->getVariables() as $varName) {
+                foreach ($defRoute->getCompiledRoute()->getVariables() as $varName) {
                     $listVar[$varName] = isset($requirements[$varName]) ? $requirements[$varName] : '*';
                 }
 

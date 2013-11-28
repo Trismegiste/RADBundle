@@ -15,12 +15,14 @@ use Trismegiste\RADBundle\Generator\RoutingTestGenerator;
  *
  * @author trismegiste@voila.fr
  */
-class GenerateRoutingTestCommand extends ContainerAwareCommand {
+class GenerateRoutingTestCommand extends ContainerAwareCommand
+{
 
     /**
      * @see Command
      */
-    protected function configure() {
+    protected function configure()
+    {
         $this->
                 setDefinition(array(
                     new InputArgument('filter', InputArgument::REQUIRED, 'Filter for routes'),
@@ -36,7 +38,8 @@ class GenerateRoutingTestCommand extends ContainerAwareCommand {
     /**
      * @see Command
      */
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $filter = $input->getArgument('filter');
 
         if (false !== strpos($filter, ':')) {
@@ -46,9 +49,15 @@ class GenerateRoutingTestCommand extends ContainerAwareCommand {
             $routeFilter = $bundle->getNamespace() . '\Controller\\' . $classNameController;
             $router = $this->getContainer()->get('routing.extract.ctrl');
             $testClassName = $classNameController . 'Test';
+        } else if (class_exists($filter)) {
+            $refl = new \ReflectionClass($filter);
+            $routeFilter = basename($refl->getFileName(), '.php');
+            $testClassName = $routeFilter . 'Test';
+            $router = $this->getContainer()->get('routing.extract.ctrl');
         } else {
-            if (is_null($bundle = $input->getOption('bundle')))
+            if (is_null($bundle = $input->getOption('bundle'))) {
                 throw new \InvalidArgumentException('bundle option must be defined when using filter');
+            }
             $bundle = $this->getApplication()->getKernel()->getBundle($bundle);
             $routeFilter = $filter;
             $router = $this->getContainer()->get('routing.extract.name');
