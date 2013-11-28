@@ -8,8 +8,6 @@ namespace Trismegiste\RADBundle\Generator;
 
 /**
  * Description of UnitTestGenerator
- *
- * @author flo
  */
 class UnitTestGenerator
 {
