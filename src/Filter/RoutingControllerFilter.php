@@ -18,6 +18,7 @@ class RoutingControllerFilter extends RoutingFilter
     {
         $def = $route->getDefaults();
         list($ctrlRoute, $action) = explode('::', $def['_controller']);
+        var_dump($filter, $ctrlRoute);
         return $filter == $ctrlRoute;
     }
 
