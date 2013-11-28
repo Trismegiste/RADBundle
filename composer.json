@@ -18,8 +18,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Trismegiste\\RADBundle": "src"
+            "Trismegiste\\RADBundle\\": "src"
         }
-    },
-    "target-dir": "Trismegiste/RADBundle"
+    }
 }
