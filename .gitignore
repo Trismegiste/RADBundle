@@ -2,3 +2,4 @@
 /vendor
 /tests/Fixtures/Kernel/cache
 /tests/Fixtures/Kernel/logs
+/doc/coverage

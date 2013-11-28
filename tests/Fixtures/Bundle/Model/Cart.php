@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Fixtures;
+namespace tests\Fixtures\Bundle\Model;
 
 class Cart
 {
