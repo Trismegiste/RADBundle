@@ -1,6 +1,6 @@
 <?php
 
-namespace Trismegiste\RADBundle\DependencyInjection;
+namespace Trismegiste\RADBundle\Filter;
 
 use Symfony\Component\Routing\Route;
 

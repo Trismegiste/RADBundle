@@ -4,9 +4,9 @@
     "type": "symfony-bundle",
     "keywords": ["phpunit", "scaffolding", "symfony"],
     "authors": [
-    {
-        "name": "Trismegiste"
-    }
+        {
+            "name": "Trismegiste"
+        }
     ],
     "require": {
         "php": ">=5.4",
@@ -14,7 +14,7 @@
         "sensio/generator-bundle": "~2.3"
     },
     "require-dev": {
-        "symfony/framework-bundle": "~2.3"
+        "symfony/symfony": "~2.3"
     },
     "autoload": {
         "psr-0": {

@@ -10,8 +10,6 @@ use Trismegiste\RADBundle\Generator\UnitTestGenerator;
 
 /**
  * Description of UnitTestGeneratorTest
- *
- * @author flo
  */
 class UnitTestGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +20,7 @@ class UnitTestGeneratorTest extends \PHPUnit_Framework_TestCase
         $fchPath = __DIR__ . '/../Fixtures/CheckConstruct.php';
         $code = file_get_contents($fchPath);
         $content = $generator->generate($code);
-        file_put_contents(dirname($fchPath) . '/CheckConstructTest.php', $content);
+        //file_put_contents(dirname($fchPath) . '/CheckConstructTest.php', $content);
     }
 
 }

@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Trismegiste\RADBundle\Generator\UnitTestGenerator;
 
 /**
@@ -20,7 +20,7 @@ use Trismegiste\RADBundle\Generator\UnitTestGenerator;
  *
  * @author florent
  */
-class GenerateModelUnitTestCommand extends Command
+class GenerateModelUnitTestCommand extends ContainerAwareCommand
 {
 
     /**
@@ -49,19 +49,28 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $filesystem = $this->getContainer()->get('filesystem');
         $modelClass = $input->getArgument('class');
         list($bundleName, $className) = explode(':', $modelClass);
         $bundle = $this->getApplication()->getKernel()->getBundle($bundleName);
-        $fchPath = $bundle->getPath() . '/' . $className . '.php';
-        $output->writeln("Processing $fchPath");
-        $code = file_get_contents($fchPath);
-        $generator = new UnitTestGenerator();
-        $testClass = $generator->generate($code, explode('\\', $bundle->getNamespace()));
-        $destPath = $bundle->getPath() . '/Tests/' . $className . 'Test.php';
-        if (!file_exists($destPath)) {
-            file_put_contents($destPath, $testClass);
-        } else {
-            $output->writeln("<error>$destPath already exists</error>");
+
+        $iter = $this->getContainer()->get('classfinder')
+                ->files()
+                ->in($bundle->getPath())
+                ->name($className . '*');
+
+        foreach ($iter as $fch) {
+            $output->writeln("Processing " . $fch->getRelativePath());
+
+            $code = $fch->getContents();
+            $generator = new UnitTestGenerator();
+            $testClass = $generator->generate($code, explode('\\', $bundle->getNamespace()));
+            $destPath = $bundle->getPath() . '/Tests/' . $className . 'Test.php';
+            if (!file_exists($destPath)) {
+                $filesystem->dumpFile($destPath, $testClass);
+            } else {
+                $output->writeln("<error>$destPath already exists</error>");
+            }
         }
     }
 

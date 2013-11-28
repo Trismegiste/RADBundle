@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="routing.extract.ctrl" class="Trismegiste\RADBundle\Filter\RoutingControllerFilter">
+            <argument id="router" type="service"/>        
+        </service>
+
+        <service id="routing.extract.name" class="Trismegiste\RADBundle\Filter\RoutingNameFilter">
+            <argument id="router" type="service"/>        
+        </service>
+    
+        <service id="classfinder" class="Symfony\Component\Finder\Finder" scope="prototype">
+        </service>
+
+    </services>
+</container>
