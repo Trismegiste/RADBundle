@@ -7,7 +7,7 @@
 namespace Trismegiste\RADBundle\Generator;
 
 /**
- * Description of UnitTestGenerator
+ * Generates unit test class based on parsed class
  */
 class UnitTestGenerator
 {

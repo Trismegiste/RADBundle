@@ -7,7 +7,7 @@
 namespace Trismegiste\RADBundle\Visitor;
 
 /**
- * SetterGetter do a match between getter and setter
+ * SetterGetter does a match between getter and setter
  */
 class SetterGetter extends CollectorVisitor
 {

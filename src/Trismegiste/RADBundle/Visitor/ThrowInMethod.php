@@ -7,7 +7,7 @@
 namespace Trismegiste\RADBundle\Visitor;
 
 /**
- * MethodVisitor is a
+ * ThrowInMethod is a visitor for thrown exception
  */
 class ThrowInMethod extends CollectorVisitor
 {

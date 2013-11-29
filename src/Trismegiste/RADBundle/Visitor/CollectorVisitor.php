@@ -9,7 +9,7 @@ namespace Trismegiste\RADBundle\Visitor;
 use Trismegiste\RADBundle\Generator\ClassMethodInfo;
 
 /**
- * CollectorVisitor is a visitor which collect data
+ * CollectorVisitor is a visitor which collects data (abstract)
  */
 abstract class CollectorVisitor extends \PHPParser_NodeVisitorAbstract
 {

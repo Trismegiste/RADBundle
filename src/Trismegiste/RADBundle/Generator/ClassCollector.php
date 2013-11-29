@@ -9,9 +9,7 @@ namespace Trismegiste\RADBundle\Generator;
 use Trismegiste\RADBundle\Visitor;
 
 /**
- * Description of ClassCollector
- *
- * @author flo
+ * Collects data on classes
  */
 class ClassCollector implements ClassMethodInfo
 {

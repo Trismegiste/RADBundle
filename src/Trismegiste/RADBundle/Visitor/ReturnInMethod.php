@@ -7,7 +7,7 @@
 namespace Trismegiste\RADBundle\Visitor;
 
 /**
- * MethodVisitor is a
+ * ReturnInMethod tracks returned value
  */
 class ReturnInMethod extends CollectorVisitor
 {

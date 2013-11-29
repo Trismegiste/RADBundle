@@ -7,7 +7,7 @@
 namespace Trismegiste\RADBundle\Visitor;
 
 /**
- * SetterGetter do a match between getter and setter
+ * SignatureMethod tracks type-hint of methods signature
  */
 class SignatureMethod extends CollectorVisitor
 {

@@ -7,7 +7,7 @@
 namespace Trismegiste\RADBundle\Visitor;
 
 /**
- * Search for write in the class properties
+ * Searches for write in the class properties
  */
 class ThisInMethod extends CollectorVisitor
 {
