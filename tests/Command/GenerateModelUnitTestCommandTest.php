@@ -22,7 +22,6 @@ class GenerateModelUnitTestCommandTest extends WebTestCase
         $kernel = self::createKernel();
         $kernel->boot();
         $kernel->registerBundles();
-        echo $kernel->getBundle('AlphaBundle')->getPath();
 
         $mockFiler = $this->getMock('Symfony\Component\Filesystem\Filesystem');
         $mockFiler->expects($this->once())
@@ -41,7 +40,6 @@ class GenerateModelUnitTestCommandTest extends WebTestCase
         ]);
 
         $output = $commandTester->getDisplay();
-        echo $output;
         $this->assertRegExp('#Processing Model/Cart#', $output);
     }
 
