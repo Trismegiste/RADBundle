@@ -11,7 +11,7 @@ namespace Trismegiste\RADBundle\Generator;
 class UnitTestGenerator
 {
 
-    public function generate($str, array $rootNamespace = array())
+    public function generate($str, array $rootNamespace = [])
     {
         $collector = new ClassCollector();
         $info = $collector->collect($str);
@@ -37,7 +37,7 @@ class UnitTestGenerator
      */
     public function dumpCalling($method, $signature)
     {
-        $compilParam = array();
+        $compilParam = [];
         foreach ($signature as $argName => $argInfo) {
             $compilParam[] = '$' . $argName;
 

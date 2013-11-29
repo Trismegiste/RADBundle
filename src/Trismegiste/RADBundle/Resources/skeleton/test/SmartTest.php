@@ -43,19 +43,19 @@ if (array_key_exists('__construct', $info['method'])) {
     }
 }
 ?>
-$new<?php echo $info['classname'] ?> = new <?php printf("%s(%s);", $info['classname'], implode(',', $compilParam)) ?>
+    $new<?php echo $info['classname'] ?> = new <?php printf("%s(%s);", $info['classname'], implode(',', $compilParam)) ?>
 
-return $new<?php echo $info['classname'] ?>;
+    return $new<?php echo $info['classname'] ?>;
 }
 
 protected function setUp()
 {
-$this->instance = $this->createInstance();
+    $this->instance = $this->createInstance();
 }
 
 protected function tearDown()
 {
-unset($this->instance);
+    unset($this->instance);
 }
 
 <?php
@@ -70,8 +70,8 @@ foreach ($info['method'] as $method => $signature) {
     public function testCalling<?= ucfirst($method) ?>()
     {
     <?php $compilParam = UnitTestGenerator::dumpCalling($method, $signature) ?>
-    $this->assertNotNull($this->instance);
-    $this->instance-><?php printf("%s(%s)", $method, implode(',', $compilParam)) ?>;
+        $this->assertNotNull($this->instance);
+        $this->instance-><?php printf("%s(%s)", $method, implode(',', $compilParam)) ?>;
     }
 <?php } ?>
 
@@ -86,9 +86,9 @@ foreach ($info['method'] as $method => $signature) {
     $getter = 'get' . ucfirst($property);
     $compilParam = UnitTestGenerator::dumpCalling('set' . ucfirst($setter), $info['method'][$setter])
     ?>
-    $this->instance-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
-    $this->assertEquals(<?= $compilParam[0] ?>, $this->instance-><?= $getter ?>());
-    $this->assertNotEquals(666, $this->instance-><?= $getter ?>());
+        $this->instance-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
+        $this->assertEquals(<?= $compilParam[0] ?>, $this->instance-><?= $getter ?>());
+        $this->assertNotEquals(666, $this->instance-><?= $getter ?>());
     }
 <?php endforeach ?>
 
@@ -103,8 +103,8 @@ foreach ($info['method'] as $method => $signature) {
         public function test<?= $method ?>Throws<?= $idx ?>()
         {
         <?php $compilParam = UnitTestGenerator::dumpCalling($method, $info['method'][$method]) ?>
-        // do something
-        $this->instance-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
+            // do something
+            $this->instance-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
         }
     <?php endforeach ?>
 <?php endforeach ?>
