@@ -1,3 +1,5 @@
 route_alpha:
-    pattern:   /alpha
+    pattern:   /alpha/{id}
     defaults:  { _controller: AlphaBundle:Func:index }
+    requirements:
+      id: \d+

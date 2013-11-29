@@ -25,7 +25,11 @@ class GenerateRoutingTestCommandTest extends WebTestCase
 
         $mockFiler = $this->getMock('Symfony\Component\Filesystem\Filesystem');
         $mockFiler->expects($this->once())
-                ->method('dumpFile');
+                ->method('dumpFile')
+//                ->will($this->returnCallback(function($fch, $cnt) {
+//                                    echo $cnt;
+//                                }))
+        ;
 
         $kernel->getContainer()->set('filesystem', $mockFiler);
 

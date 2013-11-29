@@ -17,11 +17,11 @@ class {{ testClassName }} extends WebTestCase
     {% for nom, route in routes %} 
     public function test_{{ nom }}()
     {
-        $param = array(
+        $param = [
         {% for key, val in route.var %}
-            '{{ key }}' => '{{ val }}',
+            '{{ key }}' => '{{ val }}', // replace this regex
         {% endfor %}
-        );
+        ];
         $url = $this->router->generate('{{ route.name }}', $param);
         $crawler = $this->client->request('{{ route.method }}', $url);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
