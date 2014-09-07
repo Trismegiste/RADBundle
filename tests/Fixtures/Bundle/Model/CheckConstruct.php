@@ -42,4 +42,16 @@ class CheckConstruct
         return $this->name;
     }
 
+    public function throwExceptionOne()
+    {
+        throw new \InvalidArgumentException();
+        throw new \RuntimeException();
+    }
+
+    public function throwExceptionTwo()
+    {
+        throw new \LogicException();
+        throw new \DomainException();
+    }
+
 }
