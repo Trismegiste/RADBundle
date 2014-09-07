@@ -5,19 +5,11 @@ What
 ----
 The purpose of this bundle is scaffolding :
 
-* unit test for a entity|document including validation tests.
-* functional tests for controller
+* unit test skeletons for any class including a with mockup generator
+* minimal functional tests for controller
 
 How
 ---
-
-Unit test for ORM/Entity named Verify (subdirectory Entity)
-::
-  app/console test:generate:entity MyBundle:Verify
-
-Unit test for a MongoDB/Document named Verify (subdirectory Document)
-::
-  app/console test:generate:document MyBundle:Verify
 
 Unit test for a class named Demo in subdirectory Service
 ::
@@ -45,13 +37,13 @@ Include this bundle in your AppKernel like any other bundles.
 
 Why
 ---
-Because unit testing are mandatory. You can't live without it. But honestly the creation of an unit testing class for an entity|document
-is somewhat dull. This is usually the same code, the same start... Even if I prefer to spend more time on functional tests,
-unit tests are vital when you are in a team and/or when you need refactoring (and you always need
-refactoring, unless you can beat Spock on 3D chess).
+Because unit testing are mandatory. You can't live without it. But honestly the creation of an unit testing class 
+for an entity is somewhat dull, specially when many mockups are involved. This is usually the same code, the same start... 
+Unit tests are vital when you are in a team and/or when you need refactoring (and you always need
+refactoring, unless you can beat Spock on tridimensional chess).
 
 Eventualy, the goal of the bundle is to earn time when you're starting test classes, every test class, but don't expect
-it'll code in your place. You'll probably have to fill the gap, move the namespace, delete some tests, add yours, extends some validations...
+it'll code in your place. You'll have to fill the gap, move the namespace, delete some tests, add yours, extends some validations...
 
 When
 ----
