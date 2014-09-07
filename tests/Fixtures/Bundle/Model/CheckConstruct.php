@@ -54,6 +54,12 @@ class CheckConstruct
         throw new \DomainException();
     }
 
+    public function throwDelayedException()
+    {
+        $e = new \LogicException();
+        throw $e;
+    }
+
     public function callRelative(Submodel\Info $param)
     {
         

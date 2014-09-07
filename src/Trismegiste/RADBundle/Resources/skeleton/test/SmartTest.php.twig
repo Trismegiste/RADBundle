@@ -75,9 +75,9 @@ protected function tearDown()
     {% for idx, oneThrow in stmts %}
         /**
         * In method {{ methodName }}
-        * Cover exception for {{ oneThrow }}
+        * Cover exception for "{{ oneThrow }}"
         *
-        * @expectedException {{ oneThrow }}
+        * @expectedException \Exception
         */
         public function test{{ methodName|ucfirst }}Throws{{ idx }}()
         {
@@ -86,23 +86,6 @@ protected function tearDown()
         }
     {% endfor %}    
 {% endfor %}    
-
-<?php foreach ($info['throw'] as $method => $stmts) : ?>
-    <?php foreach ($stmts as $idx => $oneThrow) : ?>
-        /**
-        * In method <?= $method . PHP_EOL ?>
-        * Cover exception for <?= $oneThrow . PHP_EOL ?>
-        *
-        * @expectedException \Exception
-        */
-        public function test<?= $method ?>Throws<?= $idx ?>()
-        {
-        <?php $compilParam = UnitTestGenerator::dumpCalling($method, $info['method'][$method]) ?>
-        // do something
-        $this->sut-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
-        }
-    <?php endforeach ?>
-<?php endforeach ?>
 
 }
 
