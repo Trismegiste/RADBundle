@@ -7,7 +7,7 @@ What
 ----
 The purpose of this bundle is scaffolding :
 
-* unit test skeletons for any class including a with mockup generator
+* unit test skeletons for any class including a mockup generator
 * minimal functional tests for controller
 
 How
