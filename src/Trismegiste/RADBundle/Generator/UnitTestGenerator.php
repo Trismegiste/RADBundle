@@ -5,11 +5,22 @@
 
 namespace Trismegiste\RADBundle\Generator;
 
+use Sensio\Bundle\GeneratorBundle\Generator\Generator as SensioGenerator;
+use Symfony\Component\Filesystem\Filesystem;
+
 /**
  * Generates unit test class based on parsed class
  */
-class UnitTestGenerator
+class UnitTestGenerator extends SensioGenerator
 {
+
+    private $filesystem;
+
+    public function __construct(Filesystem $filesystem, $skeletonDir)
+    {
+        $this->filesystem = $filesystem;
+        $this->setSkeletonDirs($skeletonDir);
+    }
 
     public function generate($str, array $rootNamespace = [])
     {

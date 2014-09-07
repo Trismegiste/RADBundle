@@ -19,7 +19,8 @@ class UnitTestGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerate()
     {
-        $generator = new UnitTestGenerator();
+        $fs = $this->getMock('Symfony\Component\Filesystem\Filesystem');
+        $generator = new UnitTestGenerator($fs, '.');
         $fchPath = __DIR__ . '/../Fixtures/Bundle/Model/CheckConstruct.php';
         $code = file_get_contents($fchPath);
         $content = $generator->generate($code);

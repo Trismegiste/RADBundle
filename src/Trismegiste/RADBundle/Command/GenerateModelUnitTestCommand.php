@@ -15,8 +15,6 @@ use Trismegiste\RADBundle\Generator\UnitTestGenerator;
 /**
  * GenerateModelUnitTestCommand is a command for
  * generation of phpunit class
- *
- * @author florent
  */
 class GenerateModelUnitTestCommand extends ContainerAwareCommand
 {
@@ -56,7 +54,7 @@ EOT
         $output->writeln("Processing $className");
 
         $code = file_get_contents($bundle->getPath() . '/' . $className . '.php');
-        $generator = new UnitTestGenerator();
+        $generator = new UnitTestGenerator($filesystem, __DIR__ . '/../Resources/skeleton/test');
         $testClass = $generator->generate($code, explode('\\', $bundle->getNamespace()));
         $destPath = $bundle->getPath() . '/Tests/' . $className . 'Test.php';
         if (!file_exists($destPath)) {
