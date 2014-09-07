@@ -53,14 +53,11 @@ EOT
 
         $output->writeln("Processing $className");
 
-        $code = file_get_contents($bundle->getPath() . '/' . $className . '.php');
         $generator = new UnitTestGenerator($filesystem, __DIR__ . '/../Resources/skeleton/test');
-        $testClass = $generator->generate($code, explode('\\', $bundle->getNamespace()));
-        $destPath = $bundle->getPath() . '/Tests/' . $className . 'Test.php';
-        if (!file_exists($destPath)) {
-            $filesystem->dumpFile($destPath, $testClass);
-        } else {
-            $output->writeln("<error>$destPath already exists</error>");
+        try {
+            $generator->generate($bundle->getPath(), $bundle->getNamespace(), $className);
+        } catch (\Exception $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
         }
     }
 

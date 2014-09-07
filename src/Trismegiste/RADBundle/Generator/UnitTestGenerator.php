@@ -1,4 +1,5 @@
 <?php
+
 /*
  * radbundle
  */
@@ -22,10 +23,13 @@ class UnitTestGenerator
         $this->setSkeletonDirs($skeletonDir);
     }
 
-    public function generate($str, array $rootNamespace = [])
+    public function generate($bundlePath, $bundleNamespace, $relativeClassname)
     {
+        $rootNamespace = explode('\\', $bundleNamespace);
+        $code = file_get_contents($bundlePath . '/' . $relativeClassname . '.php');
+
         $collector = new ClassCollector();
-        $info = $collector->collect($str);
+        $info = $collector->collect($code);
 
         $fqcnTestedClass = $info['namespace'];
         $fqcnTestedClass[] = $info['classname'];
@@ -35,58 +39,17 @@ class UnitTestGenerator
         $namespace4Test[] = 'Tests';
         array_splice($namespace4Test, count($namespace4Test), 0, array_diff_assoc($info['namespace'], $rootNamespace));
 
-        $this->renderFile('SmartTest.php.twig', 'a.php', [
-            'namespace4Test' => implode('\\', $namespace4Test),
-            'info' => $info,
-            'fqcnTestedClass' => $fqcnTestedClass
-        ]);
-    }
+        $destPath = $bundlePath . '/Tests/' . $relativeClassname . 'Test.php';
 
-    /**
-     * rendering the require above
-     */
-    static public function dumpCalling($method, $signature)
-    {
-        $compilParam = static::dumpMockParameterForCalling($signature);
-
-        foreach ($signature as $argName => $argInfo) :
-            ?>
-            <?php if (!empty($argInfo['call'])) : ?>
-                <?php foreach ($argInfo['call'] as $oneStub => $cpt) : ?>
-                    $<?= $argName ?>->expects($this->exactly(<?= $cpt ?>))->method('<?= $oneStub ?>');
-                <?php endforeach ?>
-            <?php endif ?>
-            <?php
-        endforeach;
-
-        return $compilParam;
-    }
-
-    static public function dumpMockParameterForCalling($signature, $prefix = '$')
-    {
-        $compilParam = [];
-        foreach ($signature as $argName => $argInfo) {
-            $compilParam[] = '$' . $argName;
-
-            if (strlen($argInfo['type'])) {
-                ?>
-                <?= $prefix . $argName ?> = $this->getMock('<?= $argInfo['type'] ?>'
-                <?php if (!empty($argInfo['call'])) : ?>
-                    , [<?php
-                    echo implode(',', array_map(function($val) {
-                                        return "'$val'";
-                                    }, array_keys($argInfo['call'])))
-                    ?>]
-                <?php else : ?>
-                    , []
-                <?php endif ?>, [], '', false);
-            <?php } else { ?>
-                $<?= $argName ?> = 42;
-                <?php
-            }
+        if (!$this->filesystem->exists($destPath)) {
+            $this->renderFile('SmartTest.php.twig', $destPath, [
+                'namespace4Test' => implode('\\', $namespace4Test),
+                'info' => $info,
+                'fqcnTestedClass' => $fqcnTestedClass
+            ]);
+        } else {
+            throw new \InvalidArgumentException("$destPath already exists");
         }
-
-        return $compilParam;
     }
 
     public function setSkeletonDirs($skeletonDirs)
@@ -109,11 +72,7 @@ class UnitTestGenerator
 
     protected function renderFile($template, $target, $parameters)
     {
-        if (!is_dir(dirname($target))) {
-            mkdir(dirname($target), 0777, true);
-        }
-
-        return file_put_contents($target, $this->render($template, $parameters));
+        $this->filesystem->dumpFile($target, $this->render($template, $parameters));
     }
 
 }

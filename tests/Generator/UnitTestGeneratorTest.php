@@ -22,11 +22,22 @@ class UnitTestGeneratorTest extends \PHPUnit_Framework_TestCase
         $refl = new \ReflectionClass('Trismegiste\RADBundle\TrismegisteRADBundle');
         $rootdir = dirname($refl->getFileName()) . '/Resources/skeleton/test';
         $fs = $this->getMock('Symfony\Component\Filesystem\Filesystem');
+        $testcase = $this; // smells like js...
+        $fs->expects($this->once())
+                ->method('dumpFile')
+                ->will($this->returnCallback(function($path, $content) use ($testcase) {
+                                    eval(str_replace('<?php', '', $content));
+                                    $testcase->assertRegExp('#function testCallingMethodTwoObject#', $content);
+                                    $testcase->assertRegExp('#function testPropertyName#', $content);
+                                    $testcase->assertRegExp('#function testThrowExceptionTwoThrows0#', $content);
+                                    $testcase->assertRegExp('#function testThrowExceptionTwoThrows1#', $content);
+                                }));
         $generator = new UnitTestGenerator($fs, $rootdir);
-        $fchPath = __DIR__ . '/../Fixtures/Bundle/Model/CheckConstruct.php';
-        $code = file_get_contents($fchPath);
-        $content = $generator->generate($code);
-        $this->assertRegExp('#this->getMock\(\'tests#', $content);
+        $bundlePath = __DIR__ . '/../Fixtures/Bundle';
+        $className = 'Model/CheckConstruct';
+
+        $generator->generate($bundlePath, 'tests\Fixtures\Bundle', $className);
+        //$this->assertRegExp('#this->getMock\(\'tests#', $content);
     }
 
 }
