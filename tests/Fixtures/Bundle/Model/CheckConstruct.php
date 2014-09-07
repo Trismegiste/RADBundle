@@ -42,16 +42,21 @@ class CheckConstruct
         return $this->name;
     }
 
-    public function throwExceptionOne()
+    public function throwExceptionOne($param1, $param2)
     {
         throw new \InvalidArgumentException();
         throw new \RuntimeException();
     }
 
-    public function throwExceptionTwo()
+    public function throwExceptionTwo(\Iterator $param1, array $param2)
     {
         throw new \LogicException();
         throw new \DomainException();
+    }
+
+    public function callRelative(Submodel\Info $param)
+    {
+        
     }
 
 }

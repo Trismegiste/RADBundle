@@ -1,4 +1,10 @@
-{% if argInfo.type %}
+{% if argInfo.type == '' %}
+42
+{% elseif argInfo.type == 'array' %}
+[]
+{% elseif argInfo.type == 'callable' %}
+function() {}
+{% else %}
     $this->getMockBuilder('{{ argInfo.type }}')
     {% if argInfo.call is defined %}
     ->setMethods([
@@ -10,6 +16,4 @@
     {% endif %}
     ->disableOriginalConstructor()
     ->getMock()
-{% else %}
-    42
 {% endif %}

@@ -77,10 +77,12 @@ protected function tearDown()
         * In method {{ methodName }}
         * Cover exception for {{ oneThrow }}
         *
-        * @expectedException \Exception
+        * @expectedException {{ oneThrow }}
         */
-        public function test{{ methodName }}Throws{{ idx }}()
+        public function test{{ methodName|ucfirst }}Throws{{ idx }}()
         {
+            {% include 'callparam_getmock.php.twig' with {signature: info.method[methodName]} %}
+            $this->sut->{{ methodName }}({% include 'callparam_list.php.twig'  with {signature: info.method[methodName]} %});
         }
     {% endfor %}    
 {% endfor %}    

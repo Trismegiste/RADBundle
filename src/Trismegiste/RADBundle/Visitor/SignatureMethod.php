@@ -23,12 +23,18 @@ class SignatureMethod extends CollectorVisitor
                     $this->currentMethod = $node->name;
                     $this->method[$node->name] = array();
                     foreach ($node->params as $arg) {
-                        $typing = '';
                         if (!is_null($arg->default))
                             break;
+                        $typing = '';
                         if (!empty($arg->type)) {
-                            if ($arg->type->getType() == 'Name_FullyQualified') {
-                                $typing = implode('\\', $arg->type->parts);
+                            if (is_object($arg->type)) {
+                                if ($arg->type->getType() == 'Name_FullyQualified') {
+                                    $typing = implode('\\', $arg->type->parts);
+                                } else {
+                                    // à mon avis ça bug avec un NS relatif => bah non ?!?
+                                }
+                            } else {
+                                $typing = $arg->type;
                             }
                         }
                         $this->method[$node->name][$arg->name] = array('type' => $typing);
