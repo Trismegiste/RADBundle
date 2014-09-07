@@ -1,5 +1,7 @@
 TrismegisteRADBundle
 =====================
+.. image:: https://travis-ci.org/Trismegiste/RADBundle.svg?branch=master
+    :target: https://travis-ci.org/Trismegiste/RADBundle
 
 What
 ----
