@@ -17,9 +17,10 @@ class RoutingControllerFilter extends RoutingFilter
     protected function isMatching($name, Route $route, $filter)
     {
         $def = $route->getDefaults();
-        list($ctrlRoute, $action) = explode('::', $def['_controller']);
-
-        return $filter == $ctrlRoute;
+        $matches = [];
+        return array_key_exists('_controller', $def) &&
+                preg_match('#^([^:]+)::.+$#', $def['_controller'], $matches) &&
+                ($filter == $matches[1]);
     }
 
 }
