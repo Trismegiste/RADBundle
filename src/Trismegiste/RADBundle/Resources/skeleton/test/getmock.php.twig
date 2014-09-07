@@ -1,0 +1,15 @@
+{% if argInfo.type %}
+    $this->getMockBuilder('{{ argInfo.type }}')
+    {% if argInfo.call is defined %}
+    ->setMethods([
+        {% for val in argInfo.call %}
+            {% if not loop.first %},{% endif %}
+            '{{ val }}'
+        {% endfor %}
+    ])    
+    {% endif %}
+    ->disableOriginalConstructor()
+    ->getMock()
+{% else %}
+    42
+{% endif %}

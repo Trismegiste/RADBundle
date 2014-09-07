@@ -18,6 +18,7 @@ class SetterGetter extends CollectorVisitor
     {
         if (($node->getType() == 'Stmt_ClassMethod') && ($node->type == 1)) {
             if (preg_match('#[s|g]et[A-Z][0-9A-Za-z]#', $methodName = $node->name)) {
+                // @todo Add a check on number of param for a seetter ( only one )
                 $this->method[] = $methodName;
             }
         }

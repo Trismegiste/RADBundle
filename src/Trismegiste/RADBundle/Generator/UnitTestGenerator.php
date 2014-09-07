@@ -5,16 +5,16 @@
 
 namespace Trismegiste\RADBundle\Generator;
 
-use Sensio\Bundle\GeneratorBundle\Generator\Generator as SensioGenerator;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Generates unit test class based on parsed class
  */
-class UnitTestGenerator extends SensioGenerator
+class UnitTestGenerator
 {
 
     private $filesystem;
+    private $skeletonDirs;
 
     public function __construct(Filesystem $filesystem, $skeletonDir)
     {
@@ -35,12 +35,11 @@ class UnitTestGenerator extends SensioGenerator
         $namespace4Test[] = 'Tests';
         array_splice($namespace4Test, count($namespace4Test), 0, array_diff_assoc($info['namespace'], $rootNamespace));
 
-        ob_start();
-        require(__DIR__ . '/../Resources/skeleton/test/SmartTest.php');
-        $str = ob_get_contents();
-        ob_end_clean();
-
-        return $str;
+        $this->renderFile('SmartTest.php.twig', 'a.php', [
+            'namespace4Test' => implode('\\', $namespace4Test),
+            'info' => $info,
+            'fqcnTestedClass' => $fqcnTestedClass
+        ]);
     }
 
     /**
@@ -88,6 +87,33 @@ class UnitTestGenerator extends SensioGenerator
         }
 
         return $compilParam;
+    }
+
+    public function setSkeletonDirs($skeletonDirs)
+    {
+        $this->skeletonDirs = is_array($skeletonDirs) ? $skeletonDirs : array($skeletonDirs);
+    }
+
+    protected function render($template, $parameters)
+    {
+        $twig = new \Twig_Environment(new \Twig_Loader_Filesystem($this->skeletonDirs), array(
+            'debug' => true,
+            'cache' => false,
+            'strict_variables' => true,
+            'autoescape' => false,
+        ));
+        $twig->addExtension(new TwigExt());
+
+        return $twig->render($template, $parameters);
+    }
+
+    protected function renderFile($template, $target, $parameters)
+    {
+        if (!is_dir(dirname($target))) {
+            mkdir(dirname($target), 0777, true);
+        }
+
+        return file_put_contents($target, $this->render($template, $parameters));
     }
 
 }

@@ -1,0 +1,4 @@
+{% for argName, argInfo in signature %}
+    {% if not loop.first %},{% endif %}
+    ${{ argName }}
+{% endfor %}

@@ -1,0 +1,3 @@
+{% for argName, argInfo in signature %}
+    ${{ argName }} = {% include 'getmock.php.twig' %};
+{% endfor %}

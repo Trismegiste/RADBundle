@@ -1,0 +1,105 @@
+<?php
+
+namespace {{ namespace4Test }};
+
+use {{ fqcnTestedClass }};
+
+/**
+* Unit testing for {{ info.classname }}
+*/
+class {{ info.classname }}Test extends \PHPUnit_Framework_TestCase
+{
+
+    /** @var {{ info.classname }} */
+    protected $sut;
+{% if info.method['__construct'] is defined %}
+    {% for argName, argInfo in info.method['__construct'] %}
+    /** @var {{ argInfo.type }} */
+    protected ${{ argName }};
+    {% endfor %}
+{% endif %}
+    
+/**
+* Create an instance of {{ info.classname }} in setUp
+*/
+protected function setUp()
+{
+{% if info['method']['__construct'] is defined %}
+    {% for argName, argInfo in info['method']['__construct'] %}
+        $this->{{ argName }} = {% include 'getmock.php.twig' %};
+    {% endfor %}
+{% endif %}
+$this->sut = new {{ info.classname }}(
+{% if info.method['__construct'] is defined %}
+    {% for argName, argInfo in info.method['__construct'] %}
+    {% if not loop.first %},{% endif %}
+    $this->{{ argName }}
+    {% endfor %}
+{% endif %}
+);
+}
+
+protected function tearDown()
+{
+    unset($this->sut);
+}
+
+{% for methodName, signature in info.method if methodName != '__construct' %}
+   /**
+    * Testing call for {{ methodName }}
+    */
+    public function testCalling{{ methodName|ucfirst }}()
+    {
+        {% include 'callparam_getmock.php.twig' %}
+        $this->assertNotNull($this->sut);
+        $this->sut->{{ methodName }}({% include 'callparam_list.php.twig' %});
+    }
+{% endfor %}
+
+{% for property in info.mutator %}
+   /**
+    * Testing mutator for property : {{ property }}
+    */
+    public function testProperty{{ property|ucfirst }}()
+    {
+        {% set setter = 'set' ~ property|ucfirst %}
+        {% set getter = 'get' ~ property|ucfirst %}
+        {% include 'callparam_getmock.php.twig' with {signature: info.method[setter]} %}
+        $this->sut->{{ setter }}({% include 'callparam_list.php.twig'  with {signature: info.method[setter]} %});
+        $this->assertEquals(${{ info.method[setter]|keys|first }}, $this->sut->{{ getter }}());
+        $this->assertNotEquals(666, $this->sut->{{ getter }}());
+    }
+{% endfor %}    
+    
+<?php foreach ($info['mutator'] as $property) : ?>
+
+    <?php
+    $setter = 'set' . ucfirst($property);
+    $getter = 'get' . ucfirst($property);
+    $compilParam = UnitTestGenerator::dumpCalling('set' . ucfirst($setter), $info['method'][$setter])
+    ?>
+    $this->sut-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
+    <?= $compilParam[0] ?>, $this->sut-><?= $getter ?>());
+    $this->assertNotEquals(666, $this->sut-><?= $getter ?>());
+    }
+<?php endforeach ?>
+
+<?php foreach ($info['throw'] as $method => $stmts) : ?>
+    <?php foreach ($stmts as $idx => $oneThrow) : ?>
+        /**
+        * In method <?= $method . PHP_EOL ?>
+        * Cover exception for <?= $oneThrow . PHP_EOL ?>
+        *
+        * @expectedException \Exception
+        */
+        public function test<?= $method ?>Throws<?= $idx ?>()
+        {
+        <?php $compilParam = UnitTestGenerator::dumpCalling($method, $info['method'][$method]) ?>
+        // do something
+        $this->sut-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
+        }
+    <?php endforeach ?>
+<?php endforeach ?>
+
+}
+
