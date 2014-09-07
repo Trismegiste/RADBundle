@@ -35,29 +35,10 @@ class UnitTestGenerator
     /**
      * rendering the require above
      */
-    public function dumpCalling($method, $signature)
+    static public function dumpCalling($method, $signature)
     {
-        $compilParam = [];
-        foreach ($signature as $argName => $argInfo) {
-            $compilParam[] = '$' . $argName;
+        $compilParam = static::dumpMockParameterForCalling($signature);
 
-            if (strlen($argInfo['type'])) {
-                ?>
-                $<?= $argName ?> = $this->getMock('<?= $argInfo['type'] ?>'
-                <?php if (!empty($argInfo['call'])) : ?>
-                    , array(<?php
-                    echo implode(array_map(function($val) {
-                                        return "'$val'";
-                                    }, array_keys($argInfo['call'])))
-                    ?>)
-                <?php else : ?>
-                    , array()
-                <?php endif ?>, array(), '', true, true, false);
-            <?php } else { ?>
-                $<?= $argName ?> = 42;
-                <?php
-            }
-        }
         foreach ($signature as $argName => $argInfo) :
             ?>
             <?php if (!empty($argInfo['call'])) : ?>
@@ -67,6 +48,33 @@ class UnitTestGenerator
             <?php endif ?>
             <?php
         endforeach;
+
+        return $compilParam;
+    }
+
+    static public function dumpMockParameterForCalling($signature, $prefix = '$')
+    {
+        $compilParam = [];
+        foreach ($signature as $argName => $argInfo) {
+            $compilParam[] = '$' . $argName;
+
+            if (strlen($argInfo['type'])) {
+                ?>
+                <?= $prefix . $argName ?> = $this->getMock('<?= $argInfo['type'] ?>'
+                <?php if (!empty($argInfo['call'])) : ?>
+                    , [<?php
+                    echo implode(',', array_map(function($val) {
+                                        return "'$val'";
+                                    }, array_keys($argInfo['call'])))
+                    ?>]
+                <?php else : ?>
+                    , []
+                <?php endif ?>, [], '', false);
+            <?php } else { ?>
+                $<?= $argName ?> = 42;
+                <?php
+            }
+        }
 
         return $compilParam;
     }

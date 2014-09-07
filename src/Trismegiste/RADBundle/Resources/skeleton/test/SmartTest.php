@@ -1,6 +1,9 @@
-<?php 
+<?php
+
 use Trismegiste\RADBundle\Generator\UnitTestGenerator;
-echo '<?php' ?>
+
+echo '<?php'
+?>
 
 namespace <?php echo implode('\\', $namespace4Test) ?>;
 
@@ -15,47 +18,29 @@ class <?php echo $info['classname'] ?>Test extends \PHPUnit_Framework_TestCase
 /**
 * Create an instance of <?php echo $info['classname'] . PHP_EOL ?>
 */
-protected function createInstance()
-{
-<?php
-$compilParam = array();
-if (array_key_exists('__construct', $info['method'])) {
-    $signature = $info['method']['__construct'];
-    foreach ($signature as $argName => $argInfo) {
-        $compilParam[] = '$' . $argName;
-
-        if (strlen($argInfo['type'])) {
-            ?>
-            $<?php echo $argName ?> = $this->getMock('<?php echo $argInfo['type'] ?>'
-            <?php if (isset($argInfo['call'])) : ?>
-                , array(<?php
-                echo implode(array_map(function($val) {
-                                    return "'$val'";
-                                }, $argInfo['call']))
-                ?>
-            <?php else : ?>
-                , array()
-            <?php endif ?>, array(), '', true, true, false);
-        <?php } else { ?>
-            $<?php echo $argName ?> = 42;
-            <?php
-        }
-    }
-}
-?>
-    $new<?php echo $info['classname'] ?> = new <?php printf("%s(%s);", $info['classname'], implode(',', $compilParam)) ?>
-
-    return $new<?php echo $info['classname'] ?>;
-}
-
 protected function setUp()
 {
-    $this->instance = $this->createInstance();
+<?php
+$compilParamCtor = [];
+if (array_key_exists('__construct', $info['method'])) {
+    $signature = $info['method']['__construct'];
+    $compilParamCtor = UnitTestGenerator::dumpMockParameterForCalling($signature, '$this->');
 }
+?>
+$this->sut = $new<?php echo $info['classname'] ?> = new <?php
+printf("%s(%s);", $info['classname'], implode(',', array_map(function($val) {
+                            return '$this->' . ltrim($val, '$');
+                        }, $compilParamCtor)))
+?>
+}
+protected $sut;
+<?php foreach ($compilParamCtor as $param) : ?>
+    protected <?= $param ?>;
+<?php endforeach ?>
 
 protected function tearDown()
 {
-    unset($this->instance);
+unset($this->sut);
 }
 
 <?php
@@ -70,8 +55,8 @@ foreach ($info['method'] as $method => $signature) {
     public function testCalling<?= ucfirst($method) ?>()
     {
     <?php $compilParam = UnitTestGenerator::dumpCalling($method, $signature) ?>
-        $this->assertNotNull($this->instance);
-        $this->instance-><?php printf("%s(%s)", $method, implode(',', $compilParam)) ?>;
+    $this->assertNotNull($this->sut);
+    $this->sut-><?php printf("%s(%s)", $method, implode(',', $compilParam)) ?>;
     }
 <?php } ?>
 
@@ -86,9 +71,9 @@ foreach ($info['method'] as $method => $signature) {
     $getter = 'get' . ucfirst($property);
     $compilParam = UnitTestGenerator::dumpCalling('set' . ucfirst($setter), $info['method'][$setter])
     ?>
-        $this->instance-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
-        $this->assertEquals(<?= $compilParam[0] ?>, $this->instance-><?= $getter ?>());
-        $this->assertNotEquals(666, $this->instance-><?= $getter ?>());
+    $this->sut-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
+    $this->assertEquals(<?= $compilParam[0] ?>, $this->sut-><?= $getter ?>());
+    $this->assertNotEquals(666, $this->sut-><?= $getter ?>());
     }
 <?php endforeach ?>
 
@@ -103,8 +88,8 @@ foreach ($info['method'] as $method => $signature) {
         public function test<?= $method ?>Throws<?= $idx ?>()
         {
         <?php $compilParam = UnitTestGenerator::dumpCalling($method, $info['method'][$method]) ?>
-            // do something
-            $this->instance-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
+        // do something
+        $this->sut-><?php printf("%s(%s)", $setter, implode(',', $compilParam)) ?>;
         }
     <?php endforeach ?>
 <?php endforeach ?>
