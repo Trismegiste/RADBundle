@@ -6,22 +6,11 @@
 
 namespace Trismegiste\RADBundle\Generator;
 
-use Symfony\Component\Filesystem\Filesystem;
-
 /**
  * Generates unit test class based on parsed class
  */
-class UnitTestGenerator
+class UnitTestGenerator extends AbstractGenerator
 {
-
-    private $filesystem;
-    private $skeletonDirs;
-
-    public function __construct(Filesystem $filesystem, $skeletonDir)
-    {
-        $this->filesystem = $filesystem;
-        $this->setSkeletonDirs($skeletonDir);
-    }
 
     public function generate($bundlePath, $bundleNamespace, $relativeClassname)
     {
@@ -52,27 +41,9 @@ class UnitTestGenerator
         }
     }
 
-    public function setSkeletonDirs($skeletonDirs)
+    protected function customizeTwig(\Twig_Environment $twig)
     {
-        $this->skeletonDirs = is_array($skeletonDirs) ? $skeletonDirs : array($skeletonDirs);
-    }
-
-    protected function render($template, $parameters)
-    {
-        $twig = new \Twig_Environment(new \Twig_Loader_Filesystem($this->skeletonDirs), array(
-            'debug' => true,
-            'cache' => false,
-            'strict_variables' => true,
-            'autoescape' => false,
-        ));
         $twig->addExtension(new TwigExt());
-
-        return $twig->render($template, $parameters);
-    }
-
-    protected function renderFile($template, $target, $parameters)
-    {
-        $this->filesystem->dumpFile($target, $this->render($template, $parameters));
     }
 
 }

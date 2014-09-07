@@ -11,8 +11,6 @@ use Trismegiste\RADBundle\Generator\RoutingTestGenerator;
 
 /**
  * Generates a unit testing class for a given routes
- *
- * @author trismegiste@voila.fr
  */
 class GenerateRoutingTestCommand extends ContainerAwareCommand
 {
